@@ -244,12 +244,6 @@ export default function DocumentDetailPage() {
                 <ul className="space-y-2">
                   {[...allFileUrls].slice().reverse().map((url, index) => {
                     const lower = url.toLowerCase();
-                    const isImage =
-                      lower.endsWith(".jpg") ||
-                      lower.endsWith(".jpeg") ||
-                      lower.endsWith(".png") ||
-                      lower.endsWith(".gif") ||
-                      lower.endsWith(".webp");
                     const isPdf = lower.endsWith(".pdf");
 
                     const reversedIndex = allFileUrls.length - 1 - index;
@@ -300,15 +294,6 @@ export default function DocumentDetailPage() {
                             </a>
                           </div>
                         </div>
-                        {isImage && (
-                          <div className="flex justify-center">
-                            <img
-                              src={url}
-                              alt={`ไฟล์ที่ ${index + 1}`}
-                              className="max-h-[260px] max-w-full rounded-md object-contain"
-                            />
-                          </div>
-                        )}
                       </li>
                     );
                   })}

@@ -22,7 +22,7 @@ export default function EditDocumentPage() {
   useEffect(() => {
     const now = new Date();
     const iso = now.toISOString();
-    const local = iso.slice(0, 16); // yyyy-MM-ddTHH:mm
+    const local = iso.slice(0, 10); // yyyy-MM-dd
     setCurrentDateTime(local);
   }, []);
 
@@ -55,7 +55,7 @@ export default function EditDocumentPage() {
     if (!editedAt) {
       const now = new Date();
       const iso = now.toISOString();
-      const local = iso.slice(0, 16);
+      const local = iso.slice(0, 10);
       formData.set("editedAt", local);
     }
 
@@ -330,17 +330,17 @@ export default function EditDocumentPage() {
               </div>
               <div className="space-y-1">
                 <label className="text-[11px] font-medium text-slate-800">
-                  วันที่ / เวลา แก้ไขล่าสุด *
+                  วันที่แก้ไขล่าสุด *
                 </label>
                 <input
                   name="editedAt"
-                  type="datetime-local"
+                  type="date"
                   value={currentDateTime}
                   readOnly
                   className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
                 />
                 <p className="text-[10px] text-slate-400">
-                  ระบบจะตั้งเป็นวันที่/เวลาปัจจุบันให้อัตโนมัติเมื่อแก้ไข
+                  ระบบจะตั้งเป็นวันที่ปัจจุบันให้อัตโนมัติเมื่อแก้ไข
                 </p>
               </div>
             </div>
@@ -417,7 +417,7 @@ export default function EditDocumentPage() {
                   }
                   const now = new Date();
                   const iso = now.toISOString();
-                  const local = iso.slice(0, 16);
+                  const local = iso.slice(0, 10);
                   setCurrentDateTime(local);
                   setIsSuccess(false);
                   setMessage("ยกเลิกการแก้ไขเอกสารแล้ว");

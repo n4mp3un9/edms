@@ -23,22 +23,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // บันทึกข้อมูลลง MySQL
     const db = getDb();
+    const accessLevel = shareTo;
 
-    // ใช้ตาราง edms_documents และคอลัมน์ตามนี้:
-    // id (AUTO_INCREMENT), title, department, tags, description, access_level, file_url, created_at
-    const accessLevel = shareTo; // map ค่า shareTo -> access_level ตรง ๆ (private/team/public)
-
-    // createdAt มาจาก input type=date ("YYYY-MM-DD") หรือ datetime-local ("YYYY-MM-DDTHH:mm")
-    // MySQL DATETIME ต้องเป็น "YYYY-MM-DD HH:mm:ss" เลยแปลงคร่าว ๆ
     let createdAtForDb: string | null = null;
     if (createdAt) {
       if (createdAt.length === 10) {
-        // กรณีได้เป็นวันที่ล้วน ๆ เช่น "2025-11-18"
         createdAtForDb = `${createdAt} 00:00:00`;
       } else {
-        // กรณี datetime-local เช่น "2025-11-18T06:13"
         const replaced = createdAt.replace("T", " ");
         createdAtForDb = `${replaced}:00`;
       }
@@ -47,21 +39,26 @@ export async function POST(req: Request) {
     const uploadedFileUrls: string[] = [];
 
     for (const file of files) {
-      // แยกชนิดไฟล์เบื้องต้นจากนามสกุล เพื่อเลือก resource_type ให้เหมาะสม
       const ext = file.name.split(".").pop()?.toLowerCase();
       const isDocLike = ext === "pdf" || ext === "docx";
 
-      // แปลงไฟล์จาก FormData เป็น Buffer เพื่ออัปโหลดขึ้น Cloudinary
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
+      const timestamp = Date.now();
+      const randomStr = Math.random().toString(36).substring(2, 15);
+      const publicId = `${timestamp}_${randomStr}`;
+
+      // 1. อัปโหลดไฟล์ต้นฉบับ (PDF, DOCX, หรือรูปภาพ)
       const uploadResult = await new Promise<any>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
             folder: "edms-uploads",
-            // ถ้าเป็น pdf/docx ให้ใช้ resource_type: "raw" สำหรับเอกสาร
-            // ไฟล์อื่นใช้ auto ตามเดิม
             resource_type: isDocLike ? "raw" : "auto",
+            type: "upload",
+            access_mode: "public",
+            public_id: `${publicId}.${ext}`,
+            format: ext,
           },
           (error, result) => {
             if (error) {
@@ -71,15 +68,44 @@ export async function POST(req: Request) {
             }
           }
         );
-
         uploadStream.end(buffer);
       });
+
+      // 2. ถ้าเป็น PDF ให้อัปโหลดอีกครั้งเป็นรูปภาพ preview
+      if (ext === "pdf") {
+        try {
+          await new Promise<any>((resolve, reject) => {
+            const previewStream = cloudinary.uploader.upload_stream(
+              {
+                folder: "edms-uploads",
+                resource_type: "image", // อัปโหลดเป็นรูปภาพ
+                type: "upload",
+                access_mode: "public",
+                public_id: `${publicId}_preview`, // ชื่อไฟล์ preview
+                format: "jpg", // แปลงเป็น JPG
+                pages: true, // รองรับหลายหน้า
+              },
+              (error, result) => {
+                if (error) {
+                  console.error("Preview upload error:", error);
+                  reject(error);
+                } else {
+                  resolve(result);
+                }
+              }
+            );
+            previewStream.end(buffer);
+          });
+        } catch (previewError) {
+          console.error("Failed to create PDF preview:", previewError);
+          // ถ้า preview ล้มเหลว ก็ไม่เป็นไร ยังมีไฟล์ต้นฉบับอยู่
+        }
+      }
 
       const fileUrl: string = uploadResult.secure_url;
       uploadedFileUrls.push(fileUrl);
     }
 
-    // บันทึกลงฐานข้อมูลเพียง 1 แถว โดยเก็บ file_url เป็น JSON array ของ URL ที่อัปโหลดทั้งหมด
     const sql = `
       INSERT INTO edms_documents (title, department, tags, description, access_level, file_url, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?)
