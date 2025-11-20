@@ -262,9 +262,6 @@ export default function SearchPage() {
             normalizedAccess = "private";
           }
 
-          // Debug log
-          console.log(`📄 ${doc.title}: Raw="${doc.access_level}" → Normalized="${normalizedAccess}"`);
-
           return {
             id: doc.id,
             title: doc.title,

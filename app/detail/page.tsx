@@ -374,15 +374,15 @@ export default function DocumentDetailPage() {
                 </div>
                 <p className="text-slate-700">{displayDate}</p>
               </div>
-              {editedDisplay && (
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 font-semibold">
-                    <span className="text-[13px]">✏️</span>
-                    <span>แก้ไขล่าสุด</span>
-                  </div>
-                  <p className="text-slate-700">{editedDisplay}</p>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 font-semibold">
+                  <span className="text-[13px]">✏️</span>
+                  <span>แก้ไขล่าสุด</span>
                 </div>
-              )}
+                <p className="text-slate-700">
+                  {editedDisplay || "ขณะนี้ยังไม่มีข้อมูลการแก้ไข"}
+                </p>
+              </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px]">👤</span>
