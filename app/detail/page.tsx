@@ -2,7 +2,33 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+type DbDocument = {
+  id: number;
+  title: string;
+  department: string;
+  tags: string | null;
+  description: string | null;
+  access_level: string;
+  file_url: string;
+  original_filenames?: string | null;
+  created_at: string;
+  edited_at?: string | null;
+};
+
+type DetailState = {
+  title: string;
+  owner: string;
+  displayDate: string;
+  editedDisplay: string | null;
+  department: string;
+  category: string;
+  tags: string;
+  description: string;
+  allFileUrls: string[];
+  originalNames: string[];
+};
 
 export default function DocumentDetailPage() {
   const searchParams = useSearchParams();
@@ -11,17 +37,147 @@ export default function DocumentDetailPage() {
   const [downloadMessage, setDownloadMessage] = useState<string | null>(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState<string | null>(null);
+  const [detail, setDetail] = useState<DetailState | null>(null);
 
-  const title = searchParams.get("title") ?? "ไม่พบชื่อเอกสาร";
-  const owner = searchParams.get("owner") ?? "ไม่ระบุผู้บันทึก";
   const idParam = searchParams.get("id");
-  const displayDate =
+
+  // โหลดข้อมูลจาก DB ตาม id เมื่อไม่มีข้อมูลครบจาก query
+  useEffect(() => {
+    if (!idParam) return;
+
+    // ถ้ามี title และ fileUrls ใน query อยู่แล้ว ให้ใช้ต่อไป ไม่ต้องยิง DB
+    const hasQueryData =
+      !!searchParams.get("title") &&
+      (!!searchParams.get("fileUrls") || !!searchParams.get("fileUrl"));
+    if (hasQueryData) {
+      return;
+    }
+
+    const numericId = Number(idParam);
+    if (!Number.isFinite(numericId)) return;
+
+    const fetchFromDb = async () => {
+      try {
+        const res = await fetch("/api/documents");
+        if (!res.ok) return;
+        const data = await res.json();
+        const docs = (data.documents || []) as DbDocument[];
+        const dbDoc = docs.find((d) => d.id === numericId);
+        if (!dbDoc) return;
+
+        const allFileUrls: string[] = (() => {
+          try {
+            const parsed = JSON.parse(dbDoc.file_url);
+            if (Array.isArray(parsed)) {
+              return parsed.filter((u) => typeof u === "string" && u.length > 0);
+            }
+          } catch {}
+          return dbDoc.file_url ? [dbDoc.file_url] : [];
+        })();
+
+        const originalNames: string[] = (() => {
+          if (!dbDoc.original_filenames) return [];
+          try {
+            const parsed = JSON.parse(dbDoc.original_filenames);
+            if (Array.isArray(parsed)) {
+              return parsed.filter((n) => typeof n === "string" && n.length > 0);
+            }
+          } catch {}
+          return [];
+        })();
+
+        function formatThaiDateTime(createdAt: string | null): string {
+          if (!createdAt) return "ไม่พบวันที่บันทึกเอกสาร";
+          try {
+            const match = createdAt.match(
+              /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/
+            );
+            let d: Date;
+            if (match) {
+              const [, y, m, day, hh, mm, ss] = match;
+              const year = Number(y);
+              const monthIndex = Number(m) - 1;
+              const dateNum = Number(day);
+              const hour = Number(hh);
+              const minute = Number(mm);
+              const second = Number(ss);
+              const utcMs = Date.UTC(
+                year,
+                monthIndex,
+                dateNum,
+                hour,
+                minute,
+                second
+              );
+              d = new Date(utcMs + 7 * 60 * 60 * 1000);
+            } else {
+              d = new Date(createdAt);
+            }
+            if (Number.isNaN(d.getTime())) return "ไม่พบวันที่บันทึกเอกสาร";
+
+            const monthsTh = [
+              "ม.ค.",
+              "ก.พ.",
+              "มี.ค.",
+              "เม.ย.",
+              "พ.ค.",
+              "มิ.ย.",
+              "ก.ค.",
+              "ส.ค.",
+              "ก.ย.",
+              "ต.ค.",
+              "พ.ย.",
+              "ธ.ค.",
+            ];
+            const yyyy = d.getFullYear();
+            const mmIndex = d.getMonth();
+            const ddNum = d.getDate();
+            const hh2 = String(d.getHours()).padStart(2, "0");
+            const min2 = String(d.getMinutes()).padStart(2, "0");
+            const beYear = yyyy + 543;
+            const monthName = monthsTh[mmIndex] ?? "";
+            return `${ddNum} ${monthName} ${beYear} ${hh2}:${min2} น.`;
+          } catch {
+            return "ไม่พบวันที่บันทึกเอกสาร";
+          }
+        }
+
+        function formatThaiEdited(editedAt: string | null | undefined): string | null {
+          if (!editedAt) return null;
+          const s = formatThaiDateTime(editedAt);
+          return s === "ไม่พบวันที่บันทึกเอกสาร" ? null : s;
+        }
+
+        setDetail({
+          title: dbDoc.title || "ไม่พบชื่อเอกสาร",
+          owner: "ไม่ระบุผู้บันทึก",
+          displayDate: formatThaiDateTime(dbDoc.created_at || null),
+          editedDisplay: formatThaiEdited(dbDoc.edited_at ?? null),
+          department: dbDoc.department || "ไม่ระบุหน่วยงาน/สถาบัน",
+          category: dbDoc.tags || "ไม่ระบุหมวดหมู่เอกสาร",
+          tags: dbDoc.tags || "ไม่ระบุคำสำคัญ",
+          description:
+            dbDoc.description ||
+            "คำอธิบายเอกสารจะแสดงในส่วนนี้เมื่อเชื่อมต่อกับข้อมูลจริงแล้ว",
+          allFileUrls,
+          originalNames,
+        });
+      } catch (error) {}
+    };
+
+    fetchFromDb();
+  }, [idParam, searchParams]);
+
+  // ค่าจาก query (fallback กรณีเปิดมาจากหน้า Search ตามเดิม)
+  let title = searchParams.get("title") ?? "ไม่พบชื่อเอกสาร";
+  let owner = searchParams.get("owner") ?? "ไม่ระบุผู้บันทึก";
+  let displayDate =
     searchParams.get("created") ?? "ไม่พบวันที่บันทึกเอกสาร";
-  const editedDisplay = searchParams.get("edited") ?? null;
-  const department = searchParams.get("department") ?? "ไม่ระบุหน่วยงาน/สถาบัน";
-  const category = searchParams.get("category") ?? "ไม่ระบุหมวดหมู่เอกสาร";
-  const tags = searchParams.get("tags") ?? "ไม่ระบุคำสำคัญ";
-  const description =
+  let editedDisplay = searchParams.get("edited") ?? null;
+  let department = searchParams.get("department") ?? "ไม่ระบุหน่วยงาน/สถาบัน";
+  let category = searchParams.get("category") ?? "ไม่ระบุหมวดหมู่เอกสาร";
+  let tags = searchParams.get("tags") ?? "ไม่ระบุคำสำคัญ";
+  let description =
     searchParams.get("description") ??
     "คำอธิบายเอกสารจะแสดงในส่วนนี้เมื่อเชื่อมต่อกับข้อมูลจริงแล้ว";
 
@@ -56,6 +212,20 @@ export default function DocumentDetailPage() {
     } catch {
       // ignore parse error and keep originalNames as empty
     }
+  }
+
+  // ถ้ามี detail ที่โหลดจากฐานข้อมูลแล้ว ให้ใช้ค่าจาก DB แทนค่าจาก query
+  if (detail) {
+    title = detail.title;
+    owner = detail.owner;
+    displayDate = detail.displayDate;
+    editedDisplay = detail.editedDisplay;
+    department = detail.department;
+    category = detail.category;
+    tags = detail.tags;
+    description = detail.description;
+    allFileUrls = detail.allFileUrls;
+    originalNames = detail.originalNames;
   }
 
   function handleDownload() {
@@ -265,14 +435,15 @@ export default function DocumentDetailPage() {
                 <div className="mb-2 font-semibold text-slate-900">ไฟล์แนบทั้งหมด ({allFileUrls.length} ไฟล์)</div>
                 <ul className="space-y-2">
                   {[...allFileUrls].slice().reverse().map((url, index) => {
-                    const lower = url.toLowerCase();
-                    const isPdf = lower.endsWith(".pdf");
-                    const isDoc =
-                      lower.endsWith(".doc") || lower.endsWith(".docx");
-
                     const reversedIndex = allFileUrls.length - 1 - index;
                     const defaultName = `${title || "document"}-ไฟล์ที่-${reversedIndex + 1}`;
-                    const originalName = originalNames[reversedIndex] ?? "";
+                    const originalNameRaw = originalNames[reversedIndex] ?? "";
+                    const originalName = originalNameRaw.trim();
+                    const nameForType = (originalName || url).toLowerCase();
+
+                    const isPdf = nameForType.endsWith(".pdf");
+                    const isDoc =
+                      nameForType.endsWith(".doc") || nameForType.endsWith(".docx");
                     const displayName = originalName || `ไฟล์ที่ ${index + 1}`;
 
                     const downloadUrl = `/api/download?fileUrl=${encodeURIComponent(

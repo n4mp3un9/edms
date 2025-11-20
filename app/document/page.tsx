@@ -404,6 +404,15 @@ export default function DocumentUploadPage() {
               </div>
             )}
 
+            {isUploading && (
+              <div className="fixed inset-x-0 top-4 z-40 flex justify-center px-4">
+                <div className="flex max-w-md items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-[11px] text-white shadow-lg">
+                  <span className="animate-pulse">📤</span>
+                  <span>กำลังอัปโหลดเอกสาร โปรดรอสักครู่...</span>
+                </div>
+              </div>
+            )}
+
             <div className="mt-4 flex justify-center gap-4 text-[11px] font-medium">
               <button
                 type="submit"

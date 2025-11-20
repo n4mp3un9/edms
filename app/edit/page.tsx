@@ -19,6 +19,8 @@ export default function EditDocumentPage() {
     () => searchParams.get("description") ?? ""
   );
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [showConfirmSave, setShowConfirmSave] = useState(false);
+  const [showConfirmCancel, setShowConfirmCancel] = useState(false);
 
   useEffect(() => {
     const now = new Date();
@@ -49,6 +51,7 @@ export default function EditDocumentPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     const form = e.currentTarget;
     const formData = new FormData(form);
 
@@ -120,7 +123,12 @@ export default function EditDocumentPage() {
       setIsSuccess(true);
       setMessage("บันทึกการแก้ไขเอกสารเรียบร้อยแล้ว!");
       setTimeout(() => {
-        router.push("/search");
+        const idParam = searchParams.get("id");
+        if (idParam) {
+          router.push(`/detail?id=${encodeURIComponent(idParam)}`);
+        } else {
+          router.push("/search");
+        }
       }, 1200);
     } catch (err) {
       console.error("Edit error", err);
@@ -441,9 +449,10 @@ export default function EditDocumentPage() {
 
             <div className="mt-6 flex justify-center gap-4 text-[11px] font-medium">
               <button
-                type="submit"
+                type="button"
                 disabled={isSaving}
                 className="flex items-center gap-2 rounded-full bg-indigo-700 px-7 py-2.5 text-white shadow-md hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-70"
+                onClick={() => setShowConfirmSave(true)}
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[11px]">
                   ✏️
@@ -454,17 +463,7 @@ export default function EditDocumentPage() {
                 type="button"
                 className="flex items-center gap-2 rounded-full bg-rose-600 px-7 py-2.5 text-white shadow-md hover:bg-rose-700"
                 onClick={() => {
-                  const formEl = document.getElementById("edit-form") as HTMLFormElement | null;
-                  if (formEl) {
-                    formEl.reset();
-                  }
-                  const now = new Date();
-                  const iso = now.toISOString();
-                  const local = iso.slice(0, 10);
-                  setCurrentDateTime(local);
-                  setIsSuccess(false);
-                  setMessage("ยกเลิกการแก้ไขเอกสารแล้ว");
-                  setSelectedFiles([]);
+                  setShowConfirmCancel(true);
                 }}
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[11px]">
@@ -476,6 +475,94 @@ export default function EditDocumentPage() {
           </form>
         </section>
       </main>
+
+      {/* Confirm save modal */}
+      {showConfirmSave && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-5 text-xs text-slate-800 shadow-lg">
+            <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-indigo-700">
+              <span>⚠️</span>
+              <span>ยืนยันการบันทึกการแก้ไข</span>
+            </h2>
+            <p className="mb-4 text-[11px] text-slate-600">
+              คุณต้องการบันทึกการแก้ไขเอกสาร "{initialTitle || "(ยังไม่มีชื่อเอกสาร)"}" ใช่หรือไม่?
+            </p>
+            <div className="flex justify-end gap-2 text-[11px]">
+              <button
+                type="button"
+                onClick={() => setShowConfirmSave(false)}
+                className="rounded-full bg-slate-200 px-4 py-1.5 text-slate-700 hover:bg-slate-300"
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowConfirmSave(false);
+                  const formEl = document.getElementById("edit-form") as HTMLFormElement | null;
+                  formEl?.requestSubmit();
+                }}
+                className="rounded-full bg-indigo-700 px-4 py-1.5 text-white shadow hover:bg-indigo-800"
+              >
+                ยืนยันการบันทึก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm cancel modal */}
+      {showConfirmCancel && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-5 text-xs text-slate-800 shadow-lg">
+            <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-rose-700">
+              <span>⚠️</span>
+              <span>ยืนยันการยกเลิกการแก้ไข</span>
+            </h2>
+            <p className="mb-4 text-[11px] text-slate-600">
+              คุณต้องการยกเลิกการแก้ไขเอกสาร "{initialTitle || "(ยังไม่มีชื่อเอกสาร)"}" ใช่หรือไม่?
+            </p>
+            <div className="flex justify-end gap-2 text-[11px]">
+              <button
+                type="button"
+                onClick={() => setShowConfirmCancel(false)}
+                className="rounded-full bg-slate-200 px-4 py-1.5 text-slate-700 hover:bg-slate-300"
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowConfirmCancel(false);
+                  const formEl = document.getElementById("edit-form") as HTMLFormElement | null;
+                  if (formEl) {
+                    formEl.reset();
+                  }
+                  const now = new Date();
+                  const iso = now.toISOString();
+                  const local = iso.slice(0, 10);
+                  setCurrentDateTime(local);
+                  setIsSuccess(false);
+                  setMessage("ยกเลิกการแก้ไขเอกสารแล้ว");
+                  setSelectedFiles([]);
+
+                  const idParam = searchParams.get("id");
+                  const target = idParam
+                    ? `/detail?id=${encodeURIComponent(idParam)}`
+                    : "/search";
+
+                  setTimeout(() => {
+                    router.push(target);
+                  }, 1200);
+                }}
+                className="rounded-full bg-rose-600 px-4 py-1.5 text-white shadow hover:bg-rose-700"
+              >
+                ยืนยันการยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="mt-auto bg-indigo-800 py-3 text-center text-[11px] text-white">
