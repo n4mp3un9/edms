@@ -52,150 +52,62 @@ export default function SearchPage() {
 
   const q = qInput.toLowerCase();
 
-  function getThaiDateTimeFromCreatedAt(createdAt: string | null): {
-    rawDate: string;
-    display: string;
-  } {
-    const monthsTh = [
-      "ม.ค.",
-      "ก.พ.",
-      "มี.ค.",
-      "เม.ย.",
-      "พ.ค.",
-      "มิ.ย.",
-      "ก.ค.",
-      "ส.ค.",
-      "ก.ย.",
-      "ต.ค.",
-      "พ.ย.",
-      "ธ.ค.",
-    ];
+  function formatThaiDateTime(raw: string | null | undefined): string {
+    if (!raw) return "ไม่พบวันที่บันทึกเอกสาร";
+    try {
+      const match = raw.match(
+        /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/
+      );
+      let d: Date;
+      if (match) {
+        const [, y, m, day, hh, mm, ss] = match;
+        const year = Number(y);
+        const monthIndex = Number(m) - 1;
+        const dateNum = Number(day);
+        const hour = Number(hh);
+        const minute = Number(mm);
+        const second = Number(ss);
+        const utcMs = Date.UTC(
+          year,
+          monthIndex,
+          dateNum,
+          hour,
+          minute,
+          second
+        );
+        d = new Date(utcMs + 7 * 60 * 60 * 1000);
+      } else {
+        d = new Date(raw);
+      }
 
-    function formatFromDate(d: Date): { rawDate: string; display: string } {
+      if (Number.isNaN(d.getTime())) return raw;
+
+      const monthsTh = [
+        "ม.ค.",
+        "ก.พ.",
+        "มี.ค.",
+        "เม.ย.",
+        "พ.ค.",
+        "มิ.ย.",
+        "ก.ค.",
+        "ส.ค.",
+        "ก.ย.",
+        "ต.ค.",
+        "พ.ย.",
+        "ธ.ค.",
+      ];
+
       const yyyy = d.getFullYear();
       const mmIndex = d.getMonth();
       const ddNum = d.getDate();
-      const hh = String(d.getHours()).padStart(2, "0");
-      const min = String(d.getMinutes()).padStart(2, "0");
-
-      const rawDate = `${yyyy}-${String(mmIndex + 1).padStart(2, "0")}-${String(
-        ddNum
-      ).padStart(2, "0")}`;
+      const hh2 = String(d.getHours()).padStart(2, "0");
+      const min2 = String(d.getMinutes()).padStart(2, "0");
       const beYear = yyyy + 543;
       const monthName = monthsTh[mmIndex] ?? "";
-      const display = `${ddNum} ${monthName} ${beYear} ${hh}:${min} น.`;
 
-      return { rawDate, display };
-    }
-
-    try {
-      if (!createdAt) {
-        return formatFromDate(new Date());
-      }
-
-      // แบบ A: สมมติว่าเวลาที่ฐานข้อมูลเก็บเป็น UTC แล้วแปลงเป็นเวลาไทย (+7 ชั่วโมง)
-      let d: Date;
-
-      // รูปแบบหลักจาก DB: "YYYY-MM-DD HH:mm:ss"
-      const match = createdAt.match(
-        /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/
-      );
-
-      if (match) {
-        const [, y, m, day, hh, mm, ss] = match;
-        const year = Number(y);
-        const monthIndex = Number(m) - 1;
-        const dateNum = Number(day);
-        const hour = Number(hh);
-        const minute = Number(mm);
-        const second = Number(ss);
-
-        // สร้างเวลาแบบ UTC จากค่าที่เก็บ แล้วบวก 7 ชั่วโมงให้เป็นเวลาไทย
-        const utcMs = Date.UTC(
-          year,
-          monthIndex,
-          dateNum,
-          hour,
-          minute,
-          second
-        );
-        d = new Date(utcMs + 7 * 60 * 60 * 1000);
-      } else {
-        // fallback: ปล่อยให้ Date แปลงเอง
-        d = new Date(createdAt);
-      }
-
-      if (Number.isNaN(d.getTime())) {
-        return formatFromDate(new Date());
-      }
-
-      return formatFromDate(d);
+      return `${ddNum} ${monthName} ${beYear} ${hh2}:${min2} น.`;
     } catch {
-      return formatFromDate(new Date());
-    }
-  }
-
-  function getThaiDateTimeFromEditedAt(editedAt: string | null): string | undefined {
-    if (!editedAt) return undefined;
-    try {
-      const match = editedAt.match(
-        /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/
-      );
-
-      let d: Date;
-      if (match) {
-        const [, y, m, day, hh, mm, ss] = match;
-        const year = Number(y);
-        const monthIndex = Number(m) - 1;
-        const dateNum = Number(day);
-        const hour = Number(hh);
-        const minute = Number(mm);
-        const second = Number(ss);
-
-        const utcMs = Date.UTC(
-          year,
-          monthIndex,
-          dateNum,
-          hour,
-          minute,
-          second
-        );
-        d = new Date(utcMs + 7 * 60 * 60 * 1000);
-      } else {
-        d = new Date(editedAt);
-      }
-
-      if (Number.isNaN(d.getTime())) return undefined;
-
-      const { display } = (function formatFromDate(d2: Date) {
-        const monthsTh = [
-          "ม.ค.",
-          "ก.พ.",
-          "มี.ค.",
-          "เม.ย.",
-          "พ.ค.",
-          "มิ.ย.",
-          "ก.ค.",
-          "ส.ค.",
-          "ก.ย.",
-          "ต.ค.",
-          "พ.ย.",
-          "ธ.ค.",
-        ];
-        const yyyy = d2.getFullYear();
-        const mmIndex = d2.getMonth();
-        const ddNum = d2.getDate();
-        const hh2 = String(d2.getHours()).padStart(2, "0");
-        const min2 = String(d2.getMinutes()).padStart(2, "0");
-        const beYear = yyyy + 543;
-        const monthName = monthsTh[mmIndex] ?? "";
-        const display2 = `${ddNum} ${monthName} ${beYear} ${hh2}:${min2} น.`;
-        return { display: display2 };
-      })(d);
-
-      return display;
-    } catch {
-      return undefined;
+      return raw;
     }
   }
 
@@ -217,8 +129,14 @@ export default function SearchPage() {
             "border-amber-600",
           ];
 
-          const { rawDate, display } = getThaiDateTimeFromCreatedAt(doc.created_at);
-          const editedDisplay = getThaiDateTimeFromEditedAt(doc.edited_at ?? null);
+          // ใช้วันที่/เวลา created_at จากฐานข้อมูลเป็นแหล่งเดียวสำหรับวันที่สร้าง
+          const rawDate = doc.created_at;
+          const displayDate = formatThaiDateTime(rawDate);
+
+          // แปลง edited_at เป็นข้อความภาษาไทย (ถ้ามี)
+          const editedDisplay = doc.edited_at
+            ? formatThaiDateTime(doc.edited_at)
+            : undefined;
 
           let primaryFileUrl = doc.file_url;
           let allFileUrls: string[] = [];
@@ -259,7 +177,7 @@ export default function SearchPage() {
           } else if (rawAccess.includes("public") || rawAccess.includes("สาธารณะ")) {
             normalizedAccess = "public";
           } else {
-            normalizedAccess = "private";
+            console.log(`📄 ${doc.title}: Raw="${doc.access_level}" → Normalized="${normalizedAccess}"`);
           }
 
           return {
@@ -267,8 +185,9 @@ export default function SearchPage() {
             title: doc.title,
             deptTag: doc.department,
             category: doc.tags || "",
-            date: display,
+            date: displayDate,
             rawDate,
+
             owner: "",
             description: doc.description || "",
             color: colors[index % colors.length],
@@ -309,8 +228,10 @@ export default function SearchPage() {
 
     if (accessFilter && doc.access !== accessFilter) return false;
 
-    if (startDate && doc.rawDate && doc.rawDate < startDate) return false;
-    if (endDate && doc.rawDate && doc.rawDate > endDate) return false;
+    if (startDate && doc.rawDate && doc.rawDate.slice(0, 10) < startDate)
+      return false;
+    if (endDate && doc.rawDate && doc.rawDate.slice(0, 10) > endDate)
+      return false;
 
     return true;
   });
@@ -433,12 +354,14 @@ export default function SearchPage() {
       {/* Content */}
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 pb-16">
         {/* Filter panel */}
-        <section className="rounded-2xl border border-rose-100 bg-rose-50 px-6 py-4 text-xs shadow-sm">
+        <section className="rounded-2xl border border-indigo-100 bg-white px-6 py-4 text-xs shadow-sm">
+
           <form
             className="mb-3 flex flex-wrap items-end gap-3"
             onSubmit={handleSubmit}
           >
-            <div className="flex flex-1 min-w-[200px] items-center gap-2 rounded-full bg-white px-4 py-2 shadow-sm">
+            <div className="flex flex-1 min-w-[200px] items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
+
               <span className="text-lg">🔍</span>
               <input
                 type="text"
@@ -450,13 +373,15 @@ export default function SearchPage() {
               />
             </div>
             <div className="flex flex-col gap-1 text-[11px] text-slate-700">
+
               <span>วันที่เริ่มต้น</span>
               <input
                 type="date"
                 name="startDate"
                 value={startInput}
                 onChange={(e) => setStartInput(e.target.value)}
-                className="min-w-[160px] rounded-full border border-rose-100 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700"
+                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700"
+
               />
             </div>
             <div className="flex flex-col gap-1 text-[11px] text-slate-700">
@@ -466,7 +391,8 @@ export default function SearchPage() {
                 name="endDate"
                 value={endInput}
                 onChange={(e) => setEndInput(e.target.value)}
-                className="min-w-[160px] rounded-full border border-rose-100 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700"
+                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700"
+
               />
             </div>
           </form>
@@ -475,6 +401,7 @@ export default function SearchPage() {
             <span className="text-[11px] font-medium text-slate-700">
               ระดับการเข้าถึง :
             </span>
+
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
@@ -482,7 +409,7 @@ export default function SearchPage() {
                 className={`rounded-full px-4 py-1.5 text-[11px] font-semibold shadow-sm border outline-none transition-colors ${
                   accessFilter === ""
                     ? "border-indigo-700 bg-indigo-700 text-white"
-                    : "border-slate-300 bg-white text-indigo-800 hover:bg-slate-50"
+                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 ทั้งหมด
@@ -493,7 +420,7 @@ export default function SearchPage() {
                 className={`rounded-full border px-4 py-1.5 text-[11px] font-medium outline-none transition-colors ${
                   accessFilter === "team"
                     ? "border-indigo-700 bg-indigo-700 text-white"
-                    : "border-rose-200 bg-white/60 text-slate-700 hover:bg-white"
+                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 แชร์กันในทีม
@@ -504,7 +431,7 @@ export default function SearchPage() {
                 className={`rounded-full border px-4 py-1.5 text-[11px] font-medium outline-none transition-colors ${
                   accessFilter === "public"
                     ? "border-indigo-700 bg-indigo-700 text-white"
-                    : "border-rose-200 bg-white/60 text-slate-700 hover:bg-white"
+                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 สาธารณะ
@@ -515,7 +442,7 @@ export default function SearchPage() {
                 className={`rounded-full border px-4 py-1.5 text-[11px] font-medium outline-none transition-colors ${
                   accessFilter === "private"
                     ? "border-indigo-700 bg-indigo-700 text-white"
-                    : "border-rose-200 bg-white/60 text-slate-700 hover:bg-white"
+                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 ส่วนตัว
@@ -678,7 +605,8 @@ export default function SearchPage() {
 
       {/* Footer */}
       <footer className="mt-auto bg-indigo-800 py-3 text-center text-[11px] text-white">
-        &copy; 2025 Created by Kanyarak Rojanalertprasert
+        <div>© 2025 The Federation of Thai Industries</div>
+        <div>Developed by Kanyarak Rojanalertprasert</div>
       </footer>
     </div>
   );

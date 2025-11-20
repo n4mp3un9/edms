@@ -175,7 +175,7 @@ export default function EditDocumentPage() {
 
       {/* Content */}
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 pb-16">
-        <section className="rounded-2xl border border-rose-100 bg-rose-50/80 px-8 py-6 text-xs shadow md:px-10 md:py-8">
+        <section className="rounded-2xl border border-indigo-100 bg-white px-8 py-6 text-xs shadow md:px-10 md:py-8">
           <h1 className="mb-2 flex items-center gap-2 text-lg font-semibold text-rose-700">
             <span className="text-base">✏️</span>
             <span>แก้ไขเอกสาร</span>
@@ -566,7 +566,8 @@ export default function EditDocumentPage() {
 
       {/* Footer */}
       <footer className="mt-auto bg-indigo-800 py-3 text-center text-[11px] text-white">
-        © 2025 Created by Kanyarak Rojanalertprasert
+        <div>© 2025 The Federation of Thai Industries</div>
+        <div>Developed by Kanyarak Rojanalertprasert</div>
       </footer>
     </div>
   );

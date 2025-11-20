@@ -74,9 +74,10 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-auto bg-indigo-800 py-3 text-center text-[11px] text-white">
-        © 2025 Created by Kanyarak Rojanalertprasert
-      </footer>
+        <footer className="mt-auto bg-indigo-800 py-3 text-center text-[11px] text-white">
+          <div>© 2025 The Federation of Thai Industries</div>
+          <div>Developed by Kanyarak Rojanalertprasert</div>
+        </footer>
     </div>
   );
 }

@@ -339,7 +339,7 @@ export default function DocumentDetailPage() {
 
       {/* Content */}
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 pb-16">
-        <section className="rounded-2xl border border-rose-100 bg-rose-50 px-8 py-6 text-xs shadow-sm md:px-10 md:py-8">
+        <section className="rounded-2xl border border-indigo-100 bg-white px-8 py-6 text-xs shadow-sm md:px-10 md:py-8">
           {/* Title row */}
           <div className="mb-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-rose-700">
@@ -361,7 +361,7 @@ export default function DocumentDetailPage() {
           </div>
 
           {/* Meta info */}
-          <div className="mb-6 rounded-xl bg-white/70 px-4 py-4 text-[11px] text-slate-800 shadow-sm">
+          <div className="mb-6 rounded-xl border border-slate-200 bg-white px-4 py-4 text-[11px] text-slate-800 shadow-sm">
             <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
               <span className="text-[13px]">📚</span>
               <span>ข้อมูลสรุปของเอกสาร</span>
@@ -415,7 +415,7 @@ export default function DocumentDetailPage() {
           </div>
 
           {/* Description */}
-          <div className="mb-4 space-y-2 rounded-xl bg-white/70 px-4 py-4 text-[11px] text-slate-800 shadow-sm">
+          <div className="mb-4 space-y-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-[11px] text-slate-800 shadow-sm">
             <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900">
               <span className="text-[13px]">📝</span>
               <span>รายละเอียดเอกสาร</span>
@@ -431,7 +431,7 @@ export default function DocumentDetailPage() {
             </h2>
 
             {allFileUrls.length > 0 ? (
-              <div className="rounded-xl bg-white/60 px-4 py-3 text-[11px] text-slate-700">
+              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-[11px] text-slate-700 shadow-sm">
                 <div className="mb-2 font-semibold text-slate-900">ไฟล์แนบทั้งหมด ({allFileUrls.length} ไฟล์)</div>
                 <ul className="space-y-2">
                   {[...allFileUrls].slice().reverse().map((url, index) => {
@@ -457,7 +457,7 @@ export default function DocumentDetailPage() {
                     return (
                       <li
                         key={index}
-                        className="space-y-2 rounded-lg border border-slate-200 bg-white/80 px-3 py-2 shadow-sm"
+                        className="space-y-2 rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-sm"
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
@@ -499,7 +499,7 @@ export default function DocumentDetailPage() {
                 </ul>
               </div>
             ) : (
-              <div className="rounded-xl bg-white/60 px-4 py-3 text-[11px] text-slate-500">
+              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-[11px] text-slate-500 shadow-sm">
                 ยังไม่มีไฟล์แนบสำหรับเอกสารรายการนี้
               </div>
             )}
@@ -574,7 +574,8 @@ export default function DocumentDetailPage() {
 
       {/* Footer */}
       <footer className="mt-auto bg-indigo-800 py-3 text-center text-[11px] text-white">
-        © 2025 Created by Kanyarak Rojanalertprasert
+        <div>© 2025 The Federation of Thai Industries</div>
+        <div>Developed by Kanyarak Rojanalertprasert</div>
       </footer>
     </div>
   );
