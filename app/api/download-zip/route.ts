@@ -10,6 +10,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const fileUrlsParam = searchParams.get("fileUrls");
     const title = searchParams.get("title") || "document";
+    const originalNamesParam = searchParams.get("originalNames");
 
     if (!fileUrlsParam) {
       return NextResponse.json(
@@ -19,6 +20,7 @@ export async function GET(req: Request) {
     }
 
     let fileUrls: string[] = [];
+    let originalNames: string[] = [];
     try {
       const parsed = JSON.parse(fileUrlsParam);
       if (Array.isArray(parsed)) {
@@ -27,6 +29,19 @@ export async function GET(req: Request) {
     } catch {
       // ถ้า parse ไม่ได้ ให้ถือว่าเป็น URL เดี่ยวที่ส่งมาเป็น string
       fileUrls = [fileUrlsParam];
+    }
+
+    if (originalNamesParam) {
+      try {
+        const parsedNames = JSON.parse(originalNamesParam);
+        if (Array.isArray(parsedNames)) {
+          originalNames = parsedNames.filter(
+            (n) => typeof n === "string" && n.length > 0
+          );
+        }
+      } catch {
+        // ถ้า parse ไม่ได้ ให้ปล่อย originalNames ว่างไว้
+      }
     }
 
     if (fileUrls.length === 0) {
@@ -47,10 +62,13 @@ export async function GET(req: Request) {
       }
       const arrayBuffer = await res.arrayBuffer();
 
-      // ตั้งชื่อไฟล์ตามลำดับ เพื่อให้แยกได้ว่าไฟล์ไหนเป็นไฟล์ที่เท่าไร
+      // ตั้งชื่อไฟล์: พยายามใช้ชื่อไฟล์ต้นฉบับจาก originalNames ก่อน
       const urlPath = new URL(url).pathname;
-      const originalName = urlPath.split("/").pop() || `file-${index + 1}`;
-      const fileName = `${title}-ไฟล์ที่-${index + 1}-${originalName}`;
+      const nameFromUrl = urlPath.split("/").pop() || `file-${index + 1}`;
+      const nameFromOriginal = originalNames[index];
+      const fileName =
+        (typeof nameFromOriginal === "string" && nameFromOriginal.trim()) ||
+        nameFromUrl;
 
       zip.file(fileName, arrayBuffer);
     }

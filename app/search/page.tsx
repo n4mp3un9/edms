@@ -13,6 +13,7 @@ type DbDocument = {
   access_level: "private" | "team" | "public";
   file_url: string;
   created_at: string;
+  edited_at?: string | null;
   original_filenames?: string | null;
 };
 
@@ -30,6 +31,7 @@ type UiDocument = {
   fileUrl: string;
   allFileUrls: string[];
   originalNames: string[];
+  editedDisplay?: string;
 };
 
 export default function SearchPage() {
@@ -50,21 +52,151 @@ export default function SearchPage() {
 
   const q = qInput.toLowerCase();
 
-  function getTodayRaw(): string {
-    const now = new Date();
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
+  function getThaiDateTimeFromCreatedAt(createdAt: string | null): {
+    rawDate: string;
+    display: string;
+  } {
+    const monthsTh = [
+      "ม.ค.",
+      "ก.พ.",
+      "มี.ค.",
+      "เม.ย.",
+      "พ.ค.",
+      "มิ.ย.",
+      "ก.ค.",
+      "ส.ค.",
+      "ก.ย.",
+      "ต.ค.",
+      "พ.ย.",
+      "ธ.ค.",
+    ];
+
+    function formatFromDate(d: Date): { rawDate: string; display: string } {
+      const yyyy = d.getFullYear();
+      const mmIndex = d.getMonth();
+      const ddNum = d.getDate();
+      const hh = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+
+      const rawDate = `${yyyy}-${String(mmIndex + 1).padStart(2, "0")}-${String(
+        ddNum
+      ).padStart(2, "0")}`;
+      const beYear = yyyy + 543;
+      const monthName = monthsTh[mmIndex] ?? "";
+      const display = `${ddNum} ${monthName} ${beYear} ${hh}:${min} น.`;
+
+      return { rawDate, display };
+    }
+
+    try {
+      if (!createdAt) {
+        return formatFromDate(new Date());
+      }
+
+      // แบบ A: สมมติว่าเวลาที่ฐานข้อมูลเก็บเป็น UTC แล้วแปลงเป็นเวลาไทย (+7 ชั่วโมง)
+      let d: Date;
+
+      // รูปแบบหลักจาก DB: "YYYY-MM-DD HH:mm:ss"
+      const match = createdAt.match(
+        /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/
+      );
+
+      if (match) {
+        const [, y, m, day, hh, mm, ss] = match;
+        const year = Number(y);
+        const monthIndex = Number(m) - 1;
+        const dateNum = Number(day);
+        const hour = Number(hh);
+        const minute = Number(mm);
+        const second = Number(ss);
+
+        // สร้างเวลาแบบ UTC จากค่าที่เก็บ แล้วบวก 7 ชั่วโมงให้เป็นเวลาไทย
+        const utcMs = Date.UTC(
+          year,
+          monthIndex,
+          dateNum,
+          hour,
+          minute,
+          second
+        );
+        d = new Date(utcMs + 7 * 60 * 60 * 1000);
+      } else {
+        // fallback: ปล่อยให้ Date แปลงเอง
+        d = new Date(createdAt);
+      }
+
+      if (Number.isNaN(d.getTime())) {
+        return formatFromDate(new Date());
+      }
+
+      return formatFromDate(d);
+    } catch {
+      return formatFromDate(new Date());
+    }
   }
 
-  function formatDisplayDate(raw: string): string {
-    const isoDate = raw.slice(0, 10);
-    if (/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
-      const [yyyy, mm, dd] = isoDate.split("-");
-      return `${dd}/${mm}/${yyyy}`;
+  function getThaiDateTimeFromEditedAt(editedAt: string | null): string | undefined {
+    if (!editedAt) return undefined;
+    try {
+      const match = editedAt.match(
+        /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/
+      );
+
+      let d: Date;
+      if (match) {
+        const [, y, m, day, hh, mm, ss] = match;
+        const year = Number(y);
+        const monthIndex = Number(m) - 1;
+        const dateNum = Number(day);
+        const hour = Number(hh);
+        const minute = Number(mm);
+        const second = Number(ss);
+
+        const utcMs = Date.UTC(
+          year,
+          monthIndex,
+          dateNum,
+          hour,
+          minute,
+          second
+        );
+        d = new Date(utcMs + 7 * 60 * 60 * 1000);
+      } else {
+        d = new Date(editedAt);
+      }
+
+      if (Number.isNaN(d.getTime())) return undefined;
+
+      const { display } = (function formatFromDate(d2: Date) {
+        const monthsTh = [
+          "ม.ค.",
+          "ก.พ.",
+          "มี.ค.",
+          "เม.ย.",
+          "พ.ค.",
+          "มิ.ย.",
+          "ก.ค.",
+          "ส.ค.",
+          "ก.ย.",
+          "ต.ค.",
+          "พ.ย.",
+          "ธ.ค.",
+        ];
+        const yyyy = d2.getFullYear();
+        const mmIndex = d2.getMonth();
+        const ddNum = d2.getDate();
+        const hh2 = String(d2.getHours()).padStart(2, "0");
+        const min2 = String(d2.getMinutes()).padStart(2, "0");
+        const beYear = yyyy + 543;
+        const monthName = monthsTh[mmIndex] ?? "";
+        const display2 = `${ddNum} ${monthName} ${beYear} ${hh2}:${min2} น.`;
+        return { display: display2 };
+      })(d);
+
+      return display;
+    } catch {
+      return undefined;
     }
-    return raw;
   }
 
   useEffect(() => {
@@ -85,8 +217,8 @@ export default function SearchPage() {
             "border-amber-600",
           ];
 
-          const rawDate = getTodayRaw();
-          const displayDate = formatDisplayDate(rawDate);
+          const { rawDate, display } = getThaiDateTimeFromCreatedAt(doc.created_at);
+          const editedDisplay = getThaiDateTimeFromEditedAt(doc.edited_at ?? null);
 
           let primaryFileUrl = doc.file_url;
           let allFileUrls: string[] = [];
@@ -138,7 +270,7 @@ export default function SearchPage() {
             title: doc.title,
             deptTag: doc.department,
             category: doc.tags || "",
-            date: displayDate,
+            date: display,
             rawDate,
             owner: "",
             description: doc.description || "",
@@ -147,6 +279,7 @@ export default function SearchPage() {
             fileUrl: primaryFileUrl,
             allFileUrls,
             originalNames,
+            editedDisplay,
           };
         });
 
@@ -461,6 +594,14 @@ export default function SearchPage() {
                   <span className="text-[11px]">{doc.date}</span>
                 </div>
                 <div className="flex items-center gap-2 rounded-full bg-slate-50 px-2 py-1">
+                  <span className="text-xs text-slate-500">✏️</span>
+                  <span className="text-[11px]">
+                    {doc.editedDisplay
+                      ? `แก้ไขล่าสุด ${doc.editedDisplay}`
+                      : "แก้ไขล่าสุด - ขณะนี้ยังไม่มีข้อมูลการแก้ไข"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 rounded-full bg-slate-50 px-2 py-1">
                   <span className="text-xs text-slate-500">👤</span>
                   <span className="text-[11px]">{doc.owner}</span>
                 </div>
@@ -475,13 +616,15 @@ export default function SearchPage() {
                         id: String(doc.id),
                         title: doc.title,
                         owner: doc.owner,
-                        date: doc.rawDate,
+                        created: doc.date,
+                        edited: doc.editedDisplay,
                         department: doc.deptTag,
                         category: doc.category,
                         tags: `${doc.category} ${doc.deptTag}`,
                         description: doc.description,
                         fileUrl: doc.fileUrl,
                         fileUrls: JSON.stringify(doc.allFileUrls),
+                        originalNames: JSON.stringify(doc.originalNames),
                       },
                     }}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-1.5 text-white hover:bg-emerald-700"
@@ -493,7 +636,7 @@ export default function SearchPage() {
                   </Link>
                   <button
                     type="button"
-                    onClick={() => handleDownload(doc.title, doc.allFileUrls)}
+                    onClick={() => handleDownload(doc.title, doc.allFileUrls, doc.originalNames)}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-700 px-4 py-1.5 text-white hover:bg-indigo-800"
                   >
                     <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[10px]">

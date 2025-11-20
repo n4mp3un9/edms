@@ -12,18 +12,12 @@ export default function DocumentDetailPage() {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState<string | null>(null);
 
-  function getTodayDisplayDate(): string {
-    const now = new Date();
-    const yyyy = now.getFullYear();
-    const mm = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
-    return `${dd}/${mm}/${yyyy}`;
-  }
-
   const title = searchParams.get("title") ?? "ไม่พบชื่อเอกสาร";
   const owner = searchParams.get("owner") ?? "ไม่ระบุผู้บันทึก";
   const idParam = searchParams.get("id");
-  const displayDate = getTodayDisplayDate();
+  const displayDate =
+    searchParams.get("created") ?? "ไม่พบวันที่บันทึกเอกสาร";
+  const editedDisplay = searchParams.get("edited") ?? null;
   const department = searchParams.get("department") ?? "ไม่ระบุหน่วยงาน/สถาบัน";
   const category = searchParams.get("category") ?? "ไม่ระบุหมวดหมู่เอกสาร";
   const tags = searchParams.get("tags") ?? "ไม่ระบุคำสำคัญ";
@@ -34,7 +28,9 @@ export default function DocumentDetailPage() {
   // รองรับไฟล์แนบหลายไฟล์: fileUrls (JSON array) หรือ fileUrl เดี่ยว
   const fileUrlsParam = searchParams.get("fileUrls");
   const singleFileUrl = searchParams.get("fileUrl") ?? undefined;
+  const originalNamesParam = searchParams.get("originalNames");
   let allFileUrls: string[] = [];
+  let originalNames: string[] = [];
   if (fileUrlsParam) {
     try {
       const parsed = JSON.parse(fileUrlsParam);
@@ -49,13 +45,27 @@ export default function DocumentDetailPage() {
     allFileUrls = [singleFileUrl];
   }
 
+  if (originalNamesParam) {
+    try {
+      const parsed = JSON.parse(originalNamesParam);
+      if (Array.isArray(parsed)) {
+        originalNames = parsed.filter(
+          (n) => typeof n === "string" && n.length > 0
+        );
+      }
+    } catch {
+      // ignore parse error and keep originalNames as empty
+    }
+  }
+
   function handleDownload() {
     if (allFileUrls.length === 1) {
       // กรณีมีไฟล์เดียว ดาวน์โหลดไฟล์เดียวตรง ๆ ไม่ต้องเป็น ZIP
       const singleUrl = allFileUrls[0];
+      const baseName = originalNames[0] || title || "document";
       const downloadUrl = `/api/download?fileUrl=${encodeURIComponent(
         singleUrl
-      )}&filename=${encodeURIComponent(title || "document")}`;
+      )}&filename=${encodeURIComponent(baseName)}`;
 
       const link = document.createElement("a");
       link.href = downloadUrl;
@@ -67,8 +77,11 @@ export default function DocumentDetailPage() {
       // กรณีมีหลายไฟล์ ให้ดาวน์โหลดเป็น ZIP เดียว
       const fileUrlsParam = encodeURIComponent(JSON.stringify(allFileUrls));
       const titleParam = encodeURIComponent(title || "document");
+      const originalNamesParam = encodeURIComponent(
+        JSON.stringify(originalNames)
+      );
 
-      const downloadUrl = `/api/download-zip?fileUrls=${fileUrlsParam}&title=${titleParam}`;
+      const downloadUrl = `/api/download-zip?fileUrls=${fileUrlsParam}&title=${titleParam}&originalNames=${originalNamesParam}`;
 
       const link = document.createElement("a");
       link.href = downloadUrl;
@@ -191,6 +204,15 @@ export default function DocumentDetailPage() {
                 </div>
                 <p className="text-slate-700">{displayDate}</p>
               </div>
+              {editedDisplay && (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 font-semibold">
+                    <span className="text-[13px]">✏️</span>
+                    <span>แก้ไขล่าสุด</span>
+                  </div>
+                  <p className="text-slate-700">{editedDisplay}</p>
+                </div>
+              )}
               <div className="space-y-1">
                 <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px]">👤</span>
@@ -245,13 +267,17 @@ export default function DocumentDetailPage() {
                   {[...allFileUrls].slice().reverse().map((url, index) => {
                     const lower = url.toLowerCase();
                     const isPdf = lower.endsWith(".pdf");
+                    const isDoc =
+                      lower.endsWith(".doc") || lower.endsWith(".docx");
 
                     const reversedIndex = allFileUrls.length - 1 - index;
                     const defaultName = `${title || "document"}-ไฟล์ที่-${reversedIndex + 1}`;
+                    const originalName = originalNames[reversedIndex] ?? "";
+                    const displayName = originalName || `ไฟล์ที่ ${index + 1}`;
 
                     const downloadUrl = `/api/download?fileUrl=${encodeURIComponent(
                       url
-                    )}&filename=${encodeURIComponent(defaultName)}`;
+                    )}&filename=${encodeURIComponent(originalName || defaultName)}`;
 
                     const previewUrl = isPdf
                       ? `/api/preview?fileUrl=${encodeURIComponent(url)}`
@@ -267,20 +293,22 @@ export default function DocumentDetailPage() {
                             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-100 text-[11px]">
                               📄
                             </span>
-                            <span className="truncate text-slate-700">ไฟล์ที่ {index + 1}</span>
+                            <span className="truncate text-slate-700">{displayName}</span>
                           </div>
                           <div className="flex flex-wrap items-center gap-2">
-                            <a
-                              href={previewUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="inline-flex items-center gap-2 rounded-full bg-slate-700 px-4 py-1.5 text-[11px] font-medium text-white shadow-sm hover:bg-slate-800"
-                            >
-                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[10px]">
-                                🔍
-                              </span>
-                              <span>เปิดดูไฟล์</span>
-                            </a>
+                            {!isDoc && (
+                              <a
+                                href={previewUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-2 rounded-full bg-slate-700 px-4 py-1.5 text-[11px] font-medium text-white shadow-sm hover:bg-slate-800"
+                              >
+                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[10px]">
+                                  🔍
+                                </span>
+                                <span>เปิดดูไฟล์</span>
+                              </a>
+                            )}
                             <a
                               href={downloadUrl}
                               target="_blank"

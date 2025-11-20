@@ -11,19 +11,26 @@ export default function EditDocumentPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [currentDateTime, setCurrentDateTime] = useState("");
+  const [currentDateTimeThai, setCurrentDateTimeThai] = useState("");
   const [initialTitle] = useState(() => searchParams.get("title") ?? "");
   const [initialDepartment] = useState(() => searchParams.get("department") ?? "");
   const [initialTags] = useState(() => searchParams.get("tags") ?? "");
   const [initialDescription] = useState(
     () => searchParams.get("description") ?? ""
   );
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   useEffect(() => {
     const now = new Date();
     const iso = now.toISOString();
     const local = iso.slice(0, 10); // yyyy-MM-dd
     setCurrentDateTime(local);
+    const base = now.toLocaleString("th-TH", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      timeZone: "Asia/Bangkok",
+    });
+    setCurrentDateTimeThai(`${base} น.`);
   }, []);
 
   useEffect(() => {
@@ -70,17 +77,11 @@ export default function EditDocumentPage() {
     setMessage(null);
 
     try {
-      // ถ้ามีการเลือกไฟล์ใหม่ ให้อัปเดตไฟล์แนบก่อน
-      const fileInput = form.querySelector(
-        'input[name="files"]'
-      ) as HTMLInputElement | null;
-
-      const files = fileInput?.files ? Array.from(fileInput.files) : [];
-
-      if (files.length > 0) {
+      // ถ้ามีการเลือกไฟล์ใหม่ ให้อัปเดตไฟล์แนบก่อน (รองรับหลายไฟล์เหมือนหน้าอัปโหลด)
+      if (selectedFiles.length > 0) {
         const fileForm = new FormData();
         fileForm.set("id", documentId);
-        files.forEach((f) => fileForm.append("files", f));
+        selectedFiles.forEach((f) => fileForm.append("files", f));
 
         const fileRes = await fetch("/api/documents/update-files", {
           method: "POST",
@@ -215,41 +216,83 @@ export default function EditDocumentPage() {
 
                     if (hasInvalid) {
                       setIsSuccess(false);
-                      setMessage("บางไฟล์ไม่รองรับ สามารถเลือกได้เฉพาะไฟล์ PDF, DOCX, JPG, PNG เท่านั้น");
+                      setMessage(
+                        "บางไฟล์ไม่รองรับ สามารถเลือกได้เฉพาะไฟล์ PDF, DOCX, JPG, PNG เท่านั้น"
+                      );
                     }
 
                     if (allowedFiles.length === 0) {
                       e.target.value = "";
-                      setSelectedFileName(null);
                       return;
                     }
 
-                    setSelectedFileName(
-                      allowedFiles.length === 1
-                        ? allowedFiles[0].name
-                        : `${allowedFiles.length} ไฟล์ที่เลือก`
-                    );
+                    // เพิ่มไฟล์ใหม่ต่อจากรายการเดิมเหมือนหน้าอัปโหลด
+                    setSelectedFiles((prev) => [...prev, ...allowedFiles]);
+                    // เคลียร์ input เพื่อให้เลือกไฟล์ชุดเดิมซ้ำได้
+                    e.target.value = "";
                   }}
                 />
               </label>
-              {selectedFileName && (
-                <div className="mt-2 flex w-full max-w-md items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[11px] text-slate-700">
-                  <span className="truncate">ไฟล์ใหม่ที่เลือก: {selectedFileName}</span>
-                  <button
-                    type="button"
-                    className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-[11px] text-slate-700 hover:bg-slate-300"
-                    onClick={() => {
-                      const inputEl = document.querySelector(
-                        'input[name="files"]'
-                      ) as HTMLInputElement | null;
-                      if (inputEl) {
-                        inputEl.value = "";
-                      }
-                      setSelectedFileName(null);
-                    }}
-                  >
-                    ✖
-                  </button>
+              {selectedFiles.length > 0 && (
+                <div className="mt-2 w-full max-w-xl rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] text-slate-700">
+                  <div className="mb-2 flex items-center justify-between">
+                    <div>
+                      <div className="text-[11px] font-semibold text-slate-800">
+                        ไฟล์ใหม่ที่เลือกทั้งหมด ({selectedFiles.length} ไฟล์)
+                      </div>
+                      <p className="text-[10px] text-slate-500">
+                        คุณสามารถลบไฟล์ที่ไม่ต้องการออกทีละไฟล์ก่อนบันทึกได้
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      className="rounded-full border border-slate-300 bg-white px-3 py-1 text-[10px] font-medium text-slate-600 hover:bg-slate-100"
+                      onClick={() => setSelectedFiles([])}
+                    >
+                      ลบทั้งหมด
+                    </button>
+                  </div>
+                  <div className="max-h-40 space-y-1 overflow-y-auto pr-1">
+                    {selectedFiles.map((file, index) => {
+                      const sizeKb = Math.max(1, Math.round(file.size / 1024));
+                      const ext = file.name.split(".").pop()?.toLowerCase() || "";
+                      const isImage = ["jpg", "jpeg", "png"].includes(ext);
+
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between gap-2 rounded-xl bg-white px-3 py-1.5 shadow-sm"
+                        >
+                          <div className="flex min-w-0 flex-1 items-center gap-2">
+                            <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-100 text-[11px]">
+                              {isImage ? "🖼️" : ext === "pdf" ? "📄" : "📁"}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="truncate text-[11px] font-medium text-slate-800">
+                                {file.name}
+                              </div>
+                              <div className="text-[10px] text-slate-500">
+                                {ext ? ext.toUpperCase() : ""}
+                                {ext && " · "}
+                                {sizeKb.toLocaleString()} KB
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-[11px] text-slate-700 hover:bg-slate-300"
+                            onClick={() => {
+                              setSelectedFiles((prev) =>
+                                prev.filter((_, i) => i !== index)
+                              );
+                            }}
+                          >
+                            ✖
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
@@ -334,13 +377,13 @@ export default function EditDocumentPage() {
                 </label>
                 <input
                   name="editedAt"
-                  type="date"
-                  value={currentDateTime}
+                  type="text"
+                  value={currentDateTimeThai}
                   readOnly
                   className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
                 />
                 <p className="text-[10px] text-slate-400">
-                  ระบบจะตั้งเป็นวันที่ปัจจุบันให้อัตโนมัติเมื่อแก้ไข
+                  ระบบจะตั้งเป็นวันเวลาแบบไทยของปัจจุบันให้อัตโนมัติเมื่อแก้ไข
                 </p>
               </div>
             </div>
@@ -421,7 +464,7 @@ export default function EditDocumentPage() {
                   setCurrentDateTime(local);
                   setIsSuccess(false);
                   setMessage("ยกเลิกการแก้ไขเอกสารแล้ว");
-                  setSelectedFileName(null);
+                  setSelectedFiles([]);
                 }}
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[11px]">

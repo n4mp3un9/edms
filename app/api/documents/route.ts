@@ -7,7 +7,16 @@ export async function GET() {
     const db = getDb();
 
     const [rows] = await db.execute(
-      `SELECT id, title, department, tags, description, access_level, file_url, created_at
+      `SELECT id,
+              title,
+              department,
+              tags,
+              description,
+              access_level,
+              file_url,
+              original_filenames,
+              created_at,
+              edited_at
        FROM edms_documents
        WHERE is_deleted = 0
        ORDER BY created_at DESC, id DESC`
@@ -63,7 +72,12 @@ export async function PUT(request: Request) {
     const db = getDb();
     await db.execute(
       `UPDATE edms_documents
-       SET title = ?, department = ?, tags = ?, description = ?, access_level = COALESCE(?, access_level)
+       SET title = ?,
+           department = ?,
+           tags = ?,
+           description = ?,
+           access_level = COALESCE(?, access_level),
+           edited_at = NOW()
        WHERE id = ?`,
       [title, department, tags ?? null, description ?? null, access_level ?? null, id]
     );

@@ -12,7 +12,6 @@ export async function POST(req: Request) {
     const title = (formData.get("title") as string | null) ?? "";
     const department = (formData.get("department") as string | null) ?? "";
     const tags = (formData.get("tags") as string | null) ?? "";
-    const createdAt = (formData.get("createdAt") as string | null) ?? "";
     const shareTo = (formData.get("shareTo") as string | null) ?? "private";
     const description = (formData.get("description") as string | null) ?? "";
 
@@ -26,17 +25,8 @@ export async function POST(req: Request) {
     const db = getDb();
     const accessLevel = shareTo;
 
-    let createdAtForDb: string | null = null;
-    if (createdAt) {
-      if (createdAt.length === 10) {
-        createdAtForDb = `${createdAt} 00:00:00`;
-      } else {
-        const replaced = createdAt.replace("T", " ");
-        createdAtForDb = `${replaced}:00`;
-      }
-    }
-
     const uploadedFileUrls: string[] = [];
+    const originalNames: string[] = [];
 
     for (const file of files) {
       const ext = file.name.split(".").pop()?.toLowerCase();
@@ -104,11 +94,12 @@ export async function POST(req: Request) {
 
       const fileUrl: string = uploadResult.secure_url;
       uploadedFileUrls.push(fileUrl);
+      originalNames.push(file.name);
     }
 
     const sql = `
-      INSERT INTO edms_documents (title, department, tags, description, access_level, file_url, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO edms_documents (title, department, tags, description, access_level, file_url, original_filenames, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, NOW())
     `;
 
     await db.execute(sql, [
@@ -118,7 +109,7 @@ export async function POST(req: Request) {
       description,
       accessLevel,
       JSON.stringify(uploadedFileUrls),
-      createdAtForDb,
+      JSON.stringify(originalNames),
     ]);
 
     return NextResponse.json({

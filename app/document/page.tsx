@@ -40,6 +40,7 @@ export default function DocumentUploadPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [currentDateTime, setCurrentDateTime] = useState("");
+  const [currentDateTimeThai, setCurrentDateTimeThai] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   function getLocalDateString() {
@@ -50,9 +51,20 @@ export default function DocumentUploadPage() {
     return `${yyyy}-${mm}-${dd}`;
   }
 
+  function getThaiDateTimeString() {
+    const now = new Date();
+    const base = now.toLocaleString("th-TH", {
+      dateStyle: "medium",
+      timeStyle: "short",
+      timeZone: "Asia/Bangkok",
+    });
+    return `${base} น.`;
+  }
+
   useEffect(() => {
     const localDate = getLocalDateString();
     setCurrentDateTime(localDate);
+    setCurrentDateTimeThai(getThaiDateTimeString());
   }, []);
 
   // ให้ข้อความแจ้งเตือนหายไปเองภายใน 5 วินาที
@@ -331,13 +343,13 @@ export default function DocumentUploadPage() {
                 </label>
                 <input
                   name="createdAt"
-                  type="date"
-                  value={currentDateTime}
+                  type="text"
+                  value={currentDateTimeThai}
                   readOnly
                   className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-xs outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
                 />
                 <p className="text-[10px] text-slate-400">
-                  ระบบจะตั้งเป็นวันที่ปัจจุบันให้อัตโนมัติ
+                  ระบบจะตั้งเป็นวันเวลาแบบไทยของปัจจุบันให้อัตโนมัติ
                 </p>
               </div>
             </div>

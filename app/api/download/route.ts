@@ -30,24 +30,29 @@ export async function GET(req: Request) {
       upstreamRes.headers.get("content-type") || "application/octet-stream";
 
     // ทำชื่อไฟล์ให้ปลอดภัย (ตัดตัวอักษรแปลก ๆ)
-    const baseName =
+    const safeName =
       filenameParam.replace(/[^\wก-๙ ._-]/g, "").trim() || "document";
 
-    // พยายามดึงนามสกุลไฟล์จาก URL เดิมของ Cloudinary
-    let downloadName = baseName;
-    try {
-      const urlObj = new URL(fileUrl);
-      const pathname = urlObj.pathname; // เช่น /.../edms-uploads/xxx.pdf
-      const lastSegment = pathname.substring(pathname.lastIndexOf("/") + 1);
-      const dotIndex = lastSegment.lastIndexOf(".");
-      if (dotIndex !== -1 && dotIndex < lastSegment.length - 1) {
-        const ext = lastSegment.substring(dotIndex + 1); // pdf, docx, jpg
-        if (ext.length <= 10) {
-          downloadName = `${baseName}.${ext}`;
+    // ถ้า safeName มีนามสกุลอยู่แล้ว (มีจุดและไม่ใช่จุดตัวแรก/สุดท้าย) ให้ใช้เลย
+    const dotPos = safeName.lastIndexOf(".");
+    let downloadName = safeName;
+
+    if (dotPos === -1 || dotPos === 0 || dotPos === safeName.length - 1) {
+      // ไม่มีนามสกุลที่ชัดเจน → พยายามดึงนามสกุลจาก URL เดิมของ Cloudinary มาเติม
+      try {
+        const urlObj = new URL(fileUrl);
+        const pathname = urlObj.pathname; // เช่น /.../edms-uploads/xxx.pdf
+        const lastSegment = pathname.substring(pathname.lastIndexOf("/") + 1);
+        const urlDotIndex = lastSegment.lastIndexOf(".");
+        if (urlDotIndex !== -1 && urlDotIndex < lastSegment.length - 1) {
+          const ext = lastSegment.substring(urlDotIndex + 1); // pdf, docx, jpg
+          if (ext.length <= 10) {
+            downloadName = `${safeName}.${ext}`;
+          }
         }
+      } catch {
+        // ถ้าดึงนามสกุลจาก URL ไม่ได้ ให้ใช้ safeName ตามเดิม
       }
-    } catch {
-      // ถ้าดึงนามสกุลจาก URL ไม่ได้ ให้ใช้ baseName ตามเดิม
     }
 
     return new NextResponse(arrayBuffer, {
