@@ -482,7 +482,7 @@ export default function EditDocumentPage() {
                   className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
                 />
                 <p className="text-[10px] text-slate-400">
-                  ระบบจะตั้งเป็นวันเวลาแบบไทยของปัจจุบันให้อัตโนมัติเมื่อแก้ไข
+                  ระบบจะตั้งเป็นวันเวลาปัจจุบันให้อัตโนมัติเมื่อแก้ไข
                 </p>
               </div>
             </div>

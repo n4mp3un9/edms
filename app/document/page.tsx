@@ -444,7 +444,7 @@ export default function DocumentUploadPage() {
                   className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-xs outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
                 />
                 <p className="text-[10px] text-slate-400">
-                  ระบบจะตั้งเป็นวันเวลาแบบไทยของปัจจุบันให้อัตโนมัติ
+                  ระบบจะตั้งเป็นวันเวลาปัจจุบันให้อัตโนมัติเมื่ออัปโหลด
                 </p>
               </div>
             </div>
