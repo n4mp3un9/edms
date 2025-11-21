@@ -42,6 +42,8 @@ export default function DocumentUploadPage() {
   const [currentDateTime, setCurrentDateTime] = useState("");
   const [currentDateTimeThai, setCurrentDateTimeThai] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [showConfirmUpload, setShowConfirmUpload] = useState(false);
+  const [showConfirmCancel, setShowConfirmCancel] = useState(false);
 
   function getLocalDateString() {
     const now = new Date();
@@ -569,8 +571,9 @@ export default function DocumentUploadPage() {
 
             <div className="mt-4 flex justify-center gap-4 text-[11px] font-medium">
               <button
-                type="submit"
+                type="button"
                 disabled={isUploading}
+                onClick={() => setShowConfirmUpload(true)}
                 className="flex items-center gap-2 rounded-full bg-emerald-600 px-6 py-2 text-white shadow hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-emerald-700 text-[11px]">
@@ -595,16 +598,7 @@ export default function DocumentUploadPage() {
                 type="button"
                 className="flex items-center gap-2 rounded-full bg-rose-600 px-6 py-2 text-white shadow hover:bg-rose-700"
                 onClick={() => {
-                  const formEl = document.getElementById("upload-form") as HTMLFormElement | null;
-                  if (formEl) {
-                    formEl.reset();
-                  }
-                  // รีเซ็ตวันที่ให้กลับมาเป็นปัจจุบันอีกครั้ง (เวลาท้องถิ่น)
-                  const localDate = getLocalDateString();
-                  setCurrentDateTime(localDate);
-                  setIsSuccess(false);
-                  setMessage("ยกเลิกการอัปโหลดเอกสารแล้ว");
-                  setSelectedFiles([]);
+                  setShowConfirmCancel(true);
                 }}
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-rose-600 text-[11px]">
@@ -628,6 +622,112 @@ export default function DocumentUploadPage() {
           </form>
         </section>
       </main>
+
+      {/* Confirm upload modal */}
+      {showConfirmUpload && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-5 text-xs text-slate-800 shadow-lg">
+            <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-emerald-700">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M9 12.5 11 14.5 15 10.5" />
+                  <circle cx="12" cy="12" r="9" />
+                </svg>
+              </span>
+              <span>ยืนยันการอัปโหลดเอกสาร</span>
+            </h2>
+            <p className="mb-4 text-[11px] text-slate-600">
+              คุณต้องการอัปโหลดเอกสารที่เลือกไว้ใช่หรือไม่?
+            </p>
+            <div className="flex justify-end gap-2 text-[11px]">
+              <button
+                type="button"
+                onClick={() => setShowConfirmUpload(false)}
+                className="rounded-full bg-slate-200 px-4 py-1.5 text-slate-700 hover:bg-slate-300"
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowConfirmUpload(false);
+                  const formEl = document.getElementById("upload-form") as HTMLFormElement | null;
+                  formEl?.requestSubmit();
+                }}
+                className="rounded-full bg-emerald-600 px-4 py-1.5 text-white shadow hover:bg-emerald-700"
+              >
+                ยืนยันการอัปโหลด
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Confirm cancel upload modal */}
+      {showConfirmCancel && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-5 text-xs text-slate-800 shadow-lg">
+            <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-rose-700">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-50 text-rose-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 9v4" />
+                  <path d="M12 17h.01" />
+                  <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              </span>
+              <span>ยืนยันการยกเลิกการอัปโหลด</span>
+            </h2>
+            <p className="mb-4 text-[11px] text-slate-600">
+              คุณต้องการยกเลิกการอัปโหลดเอกสารนี้ใช่หรือไม่?
+            </p>
+            <div className="flex justify-end gap-2 text-[11px]">
+              <button
+                type="button"
+                onClick={() => setShowConfirmCancel(false)}
+                className="rounded-full bg-slate-200 px-4 py-1.5 text-slate-700 hover:bg-slate-300"
+              >
+                ยกเลิก
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowConfirmCancel(false);
+                  const formEl = document.getElementById("upload-form") as HTMLFormElement | null;
+                  if (formEl) {
+                    formEl.reset();
+                  }
+                  const localDate = getLocalDateString();
+                  setCurrentDateTime(localDate);
+                  setIsSuccess(false);
+                  setMessage("ยกเลิกการอัปโหลดเอกสารแล้ว");
+                  setSelectedFiles([]);
+                }}
+                className="rounded-full bg-rose-600 px-4 py-1.5 text-white shadow hover:bg-rose-700"
+              >
+                ยืนยันการยกเลิก
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="mt-auto border-t border-slate-200 bg-white py-4 text-[11px] text-indigo-900">
         <div className="mx-auto flex w-full max-w-5xl items-center px-4">

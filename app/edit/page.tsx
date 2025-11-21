@@ -654,8 +654,8 @@ export default function EditDocumentPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="m12 9-2 3h4l-2 3" />
-                  <circle cx="12" cy="12" r="10" />
+                  <path d="M9 12.5 11 14.5 15 10.5" />
+                  <circle cx="12" cy="12" r="9" />
                 </svg>
               </span>
               <span>ยืนยันการบันทึกการแก้ไข</span>

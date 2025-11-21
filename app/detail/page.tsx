@@ -399,15 +399,17 @@ export default function DocumentDetailPage() {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  className="inline-block h-3.5 w-3.5 align-middle"
+                  className="inline-block h-4 w-4 align-middle"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                  <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
+                  <path d="M3 3v18h18" />
+                  <rect x="6" y="13" width="3" height="6" rx="0.75" />
+                  <rect x="11" y="9" width="3" height="10" rx="0.75" />
+                  <rect x="16" y="6" width="3" height="13" rx="0.75" />
                 </svg>
               </span>
               <span>ข้อมูลสรุปของเอกสาร</span>
@@ -755,9 +757,7 @@ export default function DocumentDetailPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M12 9v4" />
-                  <path d="M12 17h.01" />
-                  <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  <path d="M19 7l-7 7-7-7" />
                 </svg>
               </span>
               <span>ยืนยันการลบเอกสาร</span>
