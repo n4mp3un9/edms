@@ -177,7 +177,7 @@ export default function SearchPage() {
           } else if (rawAccess.includes("public") || rawAccess.includes("สาธารณะ")) {
             normalizedAccess = "public";
           } else {
-            console.log(`📄 ${doc.title}: Raw="${doc.access_level}" → Normalized="${normalizedAccess}"`);
+            console.log(`DOC ${doc.title}: Raw="${doc.access_level}" → Normalized="${normalizedAccess}"`);
           }
 
           return {
@@ -370,7 +370,21 @@ export default function SearchPage() {
           >
             <div className="flex flex-1 min-w-[200px] items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
 
-              <span className="text-lg">🔍</span>
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-50 text-slate-600">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="5" />
+                  <path d="m16 16 4 4" />
+                </svg>
+              </span>
               <input
                 type="text"
                 name="q"
@@ -447,11 +461,12 @@ export default function SearchPage() {
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("private")}
-                className={`rounded-full border px-4 py-1.5 text-[11px] font-medium outline-none transition-colors ${
-                  accessFilter === "private"
+                className={
+                  "rounded-full border px-4 py-1.5 text-[11px] font-medium outline-none transition-colors " +
+                  (accessFilter === "private"
                     ? "border-indigo-700 bg-indigo-700 text-white"
-                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
-                }`}
+                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50")
+                }
               >
                 ส่วนตัว
               </button>
@@ -460,10 +475,23 @@ export default function SearchPage() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="flex items-center gap-2 rounded-full bg-slate-800 px-4 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-slate-900"
+                className="flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-black"
               >
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[10px]">
-                  ↺
+                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-3 w-3 text-slate-900"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 12a9 9 0 1 1 9 9" />
+                    <path d="M3 4v8h8" />
+                  </svg>
                 </span>
                 <span>รีเซ็ต</span>
               </button>
@@ -486,8 +514,20 @@ export default function SearchPage() {
               className={`flex flex-col justify-between rounded-2xl border bg-white p-4 shadow-sm ${doc.color}`}
             >
               <div className="mb-3 flex items-start gap-3">
-                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-500 text-white text-xl leading-none shadow-md">
-                  📄
+                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-600 text-white text-xl leading-none shadow-md">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                    <path d="M14 2v6h6" />
+                  </svg>
                 </div>
 
                 <div className="flex flex-col gap-1">
@@ -502,19 +542,69 @@ export default function SearchPage() {
                       {doc.category}
                     </span>
                     <span
-                      className={`rounded-full px-2 py-0.5 ${
+                      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 ${
                         doc.access === "public"
-                          ? "bg-emerald-100 text-emerald-700"
+                          ? "bg-emerald-100 text-emerald-800"
                           : doc.access === "team"
-                          ? "bg-sky-100 text-sky-700"
-                          : "bg-slate-100 text-slate-700"
+                          ? "bg-sky-100 text-sky-800"
+                          : "bg-amber-100 text-amber-800"
                       }`}
                     >
-                      {doc.access === "public"
-                        ? "🌐 สาธารณะ"
-                        : doc.access === "team"
-                        ? "👥 แชร์กันในทีม"
-                        : "🔒 ส่วนตัว"}
+                      {doc.access === "public" && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          className="h-3 w-3"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <path d="M2 12h20" />
+                          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                        </svg>
+                      )}
+                      {doc.access === "team" && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          className="h-3 w-3"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="9" cy="7" r="3" />
+                          <circle cx="17" cy="7" r="3" />
+                          <path d="M2 21v-1a4 4 0 0 1 4-4h6" />
+                          <path d="M22 21v-1a4 4 0 0 0-4-4h-3" />
+                        </svg>
+                      )}
+                      {doc.access === "private" && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          className="h-3 w-3"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <rect x="3" y="11" width="18" height="10" rx="2" />
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                      )}
+                      <span>
+                        {doc.access === "public"
+                          ? "สาธารณะ"
+                          : doc.access === "team"
+                          ? "แชร์กันในทีม"
+                          : "ส่วนตัว"}
+                      </span>
                     </span>
                   </div>
                 </div>
@@ -522,11 +612,41 @@ export default function SearchPage() {
 
               <div className="mb-3 space-y-1 text-[11px] text-slate-700">
                 <div className="flex items-center gap-2 rounded-full bg-slate-50 px-2 py-1">
-                  <span className="text-xs text-slate-500">📅</span>
+                  <span className="flex h-5 w-5 items-center justify-center text-slate-500">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                      <line x1="8" y1="4" x2="8" y2="2" />
+                      <line x1="16" y1="4" x2="16" y2="2" />
+                    </svg>
+                  </span>
                   <span className="text-[11px]">{doc.date}</span>
                 </div>
                 <div className="flex items-center gap-2 rounded-full bg-slate-50 px-2 py-1">
-                  <span className="text-xs text-slate-500">✏️</span>
+                  <span className="flex h-5 w-5 items-center justify-center text-slate-500">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M4 20h4l10-10-4-4L4 16v4z" />
+                      <path d="M14 6l4 4" />
+                    </svg>
+                  </span>
                   <span className="text-[11px]">
                     {doc.editedDisplay
                       ? `แก้ไขล่าสุด ${doc.editedDisplay}`
@@ -534,7 +654,21 @@ export default function SearchPage() {
                   </span>
                 </div>
                 <div className="flex items-center gap-2 rounded-full bg-slate-50 px-2 py-1">
-                  <span className="text-xs text-slate-500">👤</span>
+                  <span className="flex h-5 w-5 items-center justify-center text-slate-500">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="7" r="4" />
+                      <path d="M5.5 21a7.5 7.5 0 0 1 13 0" />
+                    </svg>
+                  </span>
                   <span className="text-[11px]">{doc.owner}</span>
                 </div>
               </div>
@@ -561,8 +695,20 @@ export default function SearchPage() {
                     }}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-1.5 text-white hover:bg-emerald-700"
                   >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[10px]">
-                      👁️
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className="h-3 w-3 text-emerald-700"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
                     </span>
                     <span>รายละเอียด</span>
                   </Link>
@@ -571,12 +717,26 @@ export default function SearchPage() {
                     onClick={() => handleDownload(doc.title, doc.allFileUrls, doc.originalNames)}
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-700 px-4 py-1.5 text-white hover:bg-indigo-800"
                   >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[10px]">
-                      📥
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        className="h-3 w-3 text-indigo-700"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M12 3v12" />
+                        <path d="M8 11l4 4 4-4" />
+                        <rect x="4" y="15" width="16" height="4" rx="1" />
+                      </svg>
                     </span>
                     <span>ดาวน์โหลดเอกสาร</span>
                   </button>
                 </div>
+
                 <Link
                   href={{
                     pathname: "/edit",
@@ -590,8 +750,20 @@ export default function SearchPage() {
                   }}
                   className="inline-flex w-full items-center justify-center gap-1 rounded-full bg-slate-700 px-3 py-1.5 text-[11px] text-white hover:bg-slate-800"
                 >
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[10px]">
-                    ✏️
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="h-3 w-3 text-slate-700"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M4 20h4l10-10-4-4L4 16v4z" />
+                      <path d="M14 6l4 4" />
+                    </svg>
                   </span>
                   <span>แก้ไขเอกสารนี้</span>
                 </Link>
@@ -604,8 +776,21 @@ export default function SearchPage() {
       {/* Download success popup */}
       {downloadMessage && (
         <div className="fixed left-1/2 top-4 z-50 -translate-x-1/2">
-          <div className="flex items-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-xs text-white shadow-lg">
-            <span>✅</span>
+          <div className="flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs text-white shadow-lg">
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="h-3 w-3 text-white"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </span>
             <span>{downloadMessage}</span>
           </div>
         </div>

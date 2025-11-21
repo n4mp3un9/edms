@@ -350,8 +350,20 @@ export default function DocumentDetailPage() {
           {/* Title row */}
           <div className="mb-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-rose-700">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-500 text-lg text-white shadow-sm">
-                📄
+              <span className="text-rose-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="inline-block h-4 w-4 align-middle"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                  <path d="M14 2v6h6" />
+                </svg>
               </span>
               <h1 className="text-lg font-semibold">{title}</h1>
             </div>
@@ -360,8 +372,21 @@ export default function DocumentDetailPage() {
               onClick={handleDownload}
               className="flex items-center gap-2 rounded-full bg-indigo-700 px-4 py-2 text-[11px] font-medium text-white shadow hover:bg-indigo-800"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[11px]">
-                📥
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[11px] text-indigo-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 3v12" />
+                  <path d="M8 11l4 4 4-4" />
+                  <rect x="4" y="15" width="16" height="4" rx="1" />
+                </svg>
               </span>
               <span>ดาวน์โหลดเอกสาร</span>
             </button>
@@ -370,20 +395,64 @@ export default function DocumentDetailPage() {
           {/* Meta info */}
           <div className="mb-6 rounded-xl border border-slate-200 bg-white px-4 py-4 text-[11px] text-slate-800 shadow-sm">
             <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
-              <span className="text-[13px]">📚</span>
+              <span className="text-[13px] text-slate-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="inline-block h-3.5 w-3.5 align-middle"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z" />
+                </svg>
+              </span>
               <span>ข้อมูลสรุปของเอกสาร</span>
             </h2>
             <div className="grid gap-4 md:grid-cols-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 font-semibold">
-                  <span className="text-[13px]">📅</span>
+                  <span className="text-[13px] text-slate-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-3.5 w-3.5 align-middle"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                      <line x1="8" y1="4" x2="8" y2="2" />
+                      <line x1="16" y1="4" x2="16" y2="2" />
+                    </svg>
+                  </span>
                   <span>วันที่บันทึกเอกสาร</span>
                 </div>
                 <p className="text-slate-700">{displayDate}</p>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 font-semibold">
-                  <span className="text-[13px]">✏️</span>
+                  <span className="text-[13px] text-slate-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 align-middle"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M4 20h4l10-10-4-4L4 16v4z" />
+                      <path d="M14 6l4 4" />
+                    </svg>
+                  </span>
                   <span>แก้ไขล่าสุด</span>
                 </div>
                 <p className="text-slate-700">
@@ -392,28 +461,92 @@ export default function DocumentDetailPage() {
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 font-semibold">
-                  <span className="text-[13px]">👤</span>
+                  <span className="text-[13px] text-slate-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 align-middle"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="7" r="4" />
+                      <path d="M5.5 21a7.5 7.5 0 0 1 13 0" />
+                    </svg>
+                  </span>
                   <span>ผู้บันทึกเอกสาร</span>
                 </div>
                 <p className="text-slate-700">{owner}</p>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 font-semibold">
-                  <span className="text-[13px]">💡</span>
+                  <span className="text-[13px] text-slate-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 align-middle"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="9" r="4" />
+                      <path d="M9 18h6" />
+                      <path d="M10 22h4" />
+                      <path d="M9 14a5 5 0 0 1-2-4 5 5 0 0 1 10 0 5 5 0 0 1-2 4" />
+                    </svg>
+                  </span>
                   <span>หมวดหมู่ / ประเภทเอกสาร</span>
                 </div>
                 <p className="text-slate-700">{category}</p>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 font-semibold">
-                  <span className="text-[13px]">🏢</span>
+                  <span className="text-[13px] text-slate-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 align-middle"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M3 21V7a2 2 0 0 1 2-2h4v16" />
+                      <path d="M13 21V3h4a2 2 0 0 1 2 2v16" />
+                      <path d="M5 11h4" />
+                      <path d="M5 15h4" />
+                      <path d="M13 7h4" />
+                      <path d="M13 11h4" />
+                    </svg>
+                  </span>
                   <span>หน่วยงาน / สถาบัน</span>
                 </div>
                 <p className="text-slate-700">{department}</p>
               </div>
               <div className="space-y-1 md:col-span-2">
                 <div className="flex items-center gap-2 font-semibold">
-                  <span className="text-[13px]">#</span>
+                  <span className="text-[13px] text-slate-700">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      className="inline-block h-4 w-4 align-middle"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M4 9h16" />
+                      <path d="M4 15h16" />
+                      <path d="M10 3 8 21" />
+                      <path d="M16 3l-2 18" />
+                    </svg>
+                  </span>
                   <span>คำสำคัญ (Tags)</span>
                 </div>
                 <p className="text-slate-700">{tags}</p>
@@ -424,7 +557,21 @@ export default function DocumentDetailPage() {
           {/* Description */}
           <div className="mb-4 space-y-2 rounded-xl border border-slate-200 bg-white px-4 py-4 text-[11px] text-slate-800 shadow-sm">
             <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900">
-              <span className="text-[13px]">📝</span>
+              <span className="text-[13px] text-slate-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="inline-block h-3.5 w-3.5 align-middle"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9l7 7v9a2 2 0 0 1-2 2Z" />
+                  <path d="M17 21v-8H9" />
+                </svg>
+              </span>
               <span>รายละเอียดเอกสาร</span>
             </h2>
             <p className="text-slate-700">{description}</p>
@@ -433,7 +580,21 @@ export default function DocumentDetailPage() {
           {/* Attachments list only */}
           <div className="mb-6 space-y-3 text-[11px] text-slate-800">
             <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-900">
-              <span className="text-[13px]">👁️</span>
+              <span className="text-[13px] text-slate-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="inline-block h-4 w-4 align-middle"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </span>
               <span>ไฟล์แนบเอกสาร</span>
             </h2>
 
@@ -468,8 +629,20 @@ export default function DocumentDetailPage() {
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center gap-2">
-                            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-100 text-[11px]">
-                              📄
+                            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-100 text-[11px] text-slate-700">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                className="h-4 w-4"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                                <path d="M14 2v6h6" />
+                              </svg>
                             </span>
                             <span className="truncate text-slate-700">{displayName}</span>
                           </div>
@@ -481,8 +654,20 @@ export default function DocumentDetailPage() {
                                 rel="noreferrer"
                                 className="inline-flex items-center gap-2 rounded-full bg-slate-700 px-4 py-1.5 text-[11px] font-medium text-white shadow-sm hover:bg-slate-800"
                               >
-                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[10px]">
-                                  🔍
+                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-700 text-[10px]">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <circle cx="11" cy="11" r="5" />
+                                    <path d="m16 16 4 4" />
+                                  </svg>
                                 </span>
                                 <span>เปิดดูไฟล์</span>
                               </a>
@@ -493,8 +678,21 @@ export default function DocumentDetailPage() {
                               rel="noreferrer"
                               className="inline-flex items-center gap-2 rounded-full bg-indigo-700 px-4 py-1.5 text-[11px] font-medium text-white shadow-sm hover:bg-indigo-800"
                             >
-                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[10px]">
-                                📥
+                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-indigo-700 text-[10px]">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 24 24"
+                                  className="h-4 w-4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                >
+                                  <path d="M12 3v12" />
+                                  <path d="M8 11l4 4 4-4" />
+                                  <rect x="4" y="15" width="16" height="4" rx="1" />
+                                </svg>
                               </span>
                               <span>ดาวน์โหลดเอกสาร</span>
                             </a>
@@ -519,8 +717,21 @@ export default function DocumentDetailPage() {
               onClick={handleDeleteClick}
               className="flex items-center gap-2 rounded-full bg-rose-600 px-8 py-2 text-[11px] font-medium text-white shadow hover:bg-rose-700"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20 text-[11px]">
-                🗑️
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-rose-600 text-[11px]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 6h18" />
+                  <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  <path d="M6 6v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6" />
+                </svg>
               </span>
               <span>ลบเอกสาร</span>
             </button>
@@ -533,7 +744,22 @@ export default function DocumentDetailPage() {
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
           <div className="w-full max-w-sm rounded-2xl bg-white p-5 text-xs text-slate-800 shadow-lg">
             <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-rose-700">
-              <span>⚠️</span>
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-50 text-rose-700">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 9v4" />
+                  <path d="M12 17h.01" />
+                  <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              </span>
               <span>ยืนยันการลบเอกสาร</span>
             </h2>
             <p className="mb-4 text-[11px] text-slate-600">
@@ -563,7 +789,20 @@ export default function DocumentDetailPage() {
       {downloadMessage && (
         <div className="fixed left-1/2 top-4 z-50 -translate-x-1/2">
           <div className="flex items-center gap-2 rounded-full bg-emerald-500 px-4 py-2 text-xs text-white shadow-lg">
-            <span>✅</span>
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="h-3 w-3 text-white"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            </span>
             <span>{downloadMessage}</span>
           </div>
         </div>
@@ -573,7 +812,22 @@ export default function DocumentDetailPage() {
       {deleteMessage && (
         <div className="fixed left-1/2 top-16 z-50 -translate-x-1/2">
           <div className="flex items-center gap-2 rounded-full bg-rose-600 px-4 py-2 text-xs text-white shadow-lg">
-            <span>🗑️</span>
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="h-3 w-3 text-white"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 6h18" />
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <path d="M6 6v14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6" />
+              </svg>
+            </span>
             <span>{deleteMessage}</span>
           </div>
         </div>

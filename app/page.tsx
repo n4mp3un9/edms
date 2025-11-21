@@ -59,8 +59,21 @@ export default function Home() {
               href="/document"
               className="flex items-center gap-2 rounded-full bg-emerald-600 px-8 py-2.5 text-white shadow hover:bg-emerald-700"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-sm">
-                📥
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M12 3v12" />
+                  <path d="M8 11l4 4 4-4" />
+                  <rect x="4" y="15" width="16" height="4" rx="1" />
+                </svg>
               </span>
               <span className="text-[13px]">อัปโหลดเอกสารใหม่</span>
             </Link>
@@ -68,8 +81,20 @@ export default function Home() {
               href="/search"
               className="flex items-center gap-2 rounded-full bg-indigo-700 px-8 py-2.5 text-white shadow hover:bg-indigo-800"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-sm">
-                🔍
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="5" />
+                  <path d="m16 16 4 4" />
+                </svg>
               </span>
               <span className="text-[13px]">ค้นหา / เอกสารทั้งหมด</span>
             </Link>
@@ -77,8 +102,20 @@ export default function Home() {
               href="/search"
               className="flex items-center gap-2 rounded-full bg-slate-700 px-8 py-2.5 text-white shadow hover:bg-slate-800"
             >
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20 text-sm">
-                ✏️
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 20h4l10-10-4-4L4 16v4z" />
+                  <path d="M14 6l4 4" />
+                </svg>
               </span>
               <span className="text-[13px]">แก้ไขเอกสาร</span>
             </Link>
