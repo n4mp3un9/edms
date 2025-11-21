@@ -578,13 +578,13 @@ export default function EditDocumentPage() {
             <img
               src="/fti-logo.png"
               alt="FTI"
-              className="h-8 w-auto"
+              className="h-14 w-auto"
             />
           </div>
           <div className="mx-auto flex flex-col items-center text-center text-[11px] leading-snug text-slate-700">
-            <span>© 2025 จัดทำโดย ฝ่ายดิจิทัลและเทคโนโลยีสารสนเทศ สภาอุตสาหกรรมแห่งประเทศไทย</span>
+            <span>© 2025 จัดทำโดย ฝ่ายดิจิทัลและเทคโนโลยี สภาอุตสาหกรรมแห่งประเทศไทย</span>
             <span>จัดทำโดย นางสาวกัลยรักษ์ โรจนเลิศประเสริฐ</span>
-            <span>นิสิตฝึกงาน มหาวิทยาลัยพะเยา</span>
+            <span>นักศึกษาฝึกงาน มหาวิทยาลัยพะเยา</span>
           </div>
         </div>
       </footer>

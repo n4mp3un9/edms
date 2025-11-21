@@ -47,10 +47,10 @@ export default function Home() {
         <section className="w-full max-w-3xl rounded-2xl border border-indigo-100 bg-white px-8 py-8 text-center shadow-sm">
           <div className="mb-6 space-y-3">
             <h1 className="text-3xl font-semibold text-slate-900">
-              ยินดีต้อนรับเข้าสู่ระบบ EDMS
+              ระบบบริหารจัดการเอกสารอิเล็กทรอนิกส์ภายในองค์กร
             </h1>
             <p className="text-sm text-slate-600">
-              ระบบจัดการเอกสารอิเล็กทรอนิกส์สำหรับการจัดเก็บ ค้นหา และแชร์เอกสารภายในองค์กร
+              แพลตฟอร์มเพื่อใช้จัดเก็บ ค้นหา และแชร์เอกสารอย่างเป็นระบบ
             </p>
           </div>
 
@@ -94,15 +94,15 @@ export default function Home() {
             <img
               src="/fti-logo.png"
               alt="FTI"
-              className="h-8 w-auto"
+              className="h-14 w-auto"
             />
           </div>
 
           {/* ข้อความลิขสิทธิ์ อยู่กึ่งกลางแถบ */}
           <div className="mx-auto flex flex-col items-center text-center text-[11px] leading-snug text-slate-700">
-            <span>© 2025 จัดทำโดย ฝ่ายดิจิทัลและเทคโนโลยีสารสนเทศ สภาอุตสาหกรรมแห่งประเทศไทย</span>
+            <span>© 2025 จัดทำโดย ฝ่ายดิจิทัลและเทคโนโลยี สภาอุตสาหกรรมแห่งประเทศไทย</span>
             <span>จัดทำโดย นางสาวกัลยรักษ์ โรจนเลิศประเสริฐ</span>
-            <span>นิสิตฝึกงาน มหาวิทยาลัยพะเยา</span>
+            <span>นักศึกษาฝึกงาน มหาวิทยาลัยพะเยา</span>
           </div>
         </div>
       </footer>
