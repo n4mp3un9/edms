@@ -316,43 +316,42 @@ export default function SearchPage() {
 
   const accessLabel =
     accessFilter === "team"
-      ? " - แชร์กันในทีม"
+      ? " - แชร์ภายในหน่วยงาน"
       : accessFilter === "public"
-      ? " - สาธารณะ"
+      ? " - แชร์ทั้งองค์กร"
       : accessFilter === "private"
-      ? " - ส่วนตัว"
+      ? " - แชร์ส่วนตัว"
       : "";
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-slate-900">
       {/* Header */}
       <header className="bg-indigo-800 text-white shadow">
-        <div className="flex h-14 w-full items-stretch">
+        <div className="flex h-14 w-full items-stretch pl-0 pr-2 sm:pl-0 sm:pr-4">
           <div className="flex items-stretch">
-            <div className="flex items-center bg-white px-6">
+            <div className="flex items-center bg-white px-3 sm:px-6">
               <Link href="/" className="flex items-center gap-2 text-indigo-800">
-                <img src="/fti-logo.png" alt="EDMS" className="h-8 w-auto" />
-                <span className="text-lg font-semibold tracking-wide">EDMS</span>
+                <img src="/fti-logo.png" alt="EDMS" className="h-7 w-auto sm:h-8" />
+                <span className="text-base font-semibold tracking-wide sm:text-lg">EDMS</span>
               </Link>
             </div>
-            <div className="header-logo-notch h-full w-16 bg-white" />
+            <div className="header-logo-notch h-full w-12 bg-white sm:w-16" />
           </div>
 
-          <nav className="ml-auto flex items-center gap-2 px-8 text-xs font-medium">
-           <Link
+          <nav className="ml-auto flex items-center gap-1 px-2 text-[10px] font-medium sm:gap-2 sm:px-8 sm:text-xs">
+            <Link
               href="/"
-              className="rounded-full border border-white/60 bg-white/10 px-4 py-1.5 text-white transition hover:bg-white hover:text-indigo-800"
+              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
             >
               Home
             </Link>
-
             <Link
               href="/document"
-              className="rounded-full border border-white/60 bg-white/10 px-4 py-1.5 text-white transition hover:bg-white hover:text-indigo-800"
+              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
             >
               Document
             </Link>
-            <span className="rounded-full bg-white px-4 py-1.5 text-indigo-800 shadow-sm">
+            <span className="rounded-full bg-white px-3 py-1.5 text-indigo-800 shadow-sm sm:px-4">
               Search
             </span>
           </nav>
@@ -382,7 +381,7 @@ export default function SearchPage() {
                   strokeLinejoin="round"
                 >
                   <circle cx="11" cy="11" r="5" />
-                  <path d="m16 16 4 4" />
+                  <path d="M16 16 4 4" />
                 </svg>
               </span>
               <input
@@ -402,8 +401,7 @@ export default function SearchPage() {
                 name="startDate"
                 value={startInput}
                 onChange={(e) => setStartInput(e.target.value)}
-                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700"
-
+                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700 font-sans"
               />
             </div>
             <div className="flex flex-col gap-1 text-[11px] text-slate-700">
@@ -413,8 +411,7 @@ export default function SearchPage() {
                 name="endDate"
                 value={endInput}
                 onChange={(e) => setEndInput(e.target.value)}
-                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700"
-
+                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700 font-sans"
               />
             </div>
           </form>
@@ -445,7 +442,7 @@ export default function SearchPage() {
                     : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
-                แชร์กันในทีม
+                แชร์ภายในหน่วยงาน
               </button>
               <button
                 type="button"
@@ -456,7 +453,7 @@ export default function SearchPage() {
                     : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
-                สาธารณะ
+                แชร์ทั้งองค์กร
               </button>
               <button
                 type="button"
@@ -468,7 +465,7 @@ export default function SearchPage() {
                     : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50")
                 }
               >
-                ส่วนตัว
+                แชร์ส่วนตัว
               </button>
             </div>
             <div className="ml-auto flex items-center gap-2">
@@ -600,10 +597,10 @@ export default function SearchPage() {
                       )}
                       <span>
                         {doc.access === "public"
-                          ? "สาธารณะ"
+                          ? "แชร์ทั้งองค์กร"
                           : doc.access === "team"
-                          ? "แชร์กันในทีม"
-                          : "ส่วนตัว"}
+                          ? "แชร์ภายในหน่วยงาน"
+                          : "แชร์ส่วนตัว"}
                       </span>
                     </span>
                   </div>

@@ -5,36 +5,32 @@ export default function Home() {
     <div className="flex min-h-screen flex-col bg-white text-slate-900">
       {/* Header */}
       <header className="bg-indigo-800 text-white shadow">
-        <div className="flex h-14 w-full items-stretch">
-          {/* โลโก้พื้นขาว + มุมเฉียง */}
+        <div className="flex h-14 w-full items-stretch pl-0 pr-2 sm:pl-0 sm:pr-4">
+          {/* โลโก้พื้นขาว + มุมเฉียง แบบเดียวกับหน้า Edit */}
           <div className="flex items-stretch">
-            <div className="flex items-center bg-white px-6">
+            <div className="flex items-center bg-white px-3 sm:px-6">
               <Link href="/" className="flex items-center gap-2 text-indigo-800">
-                <img
-                  src="/fti-logo.png"
-                  alt="EDMS"
-                  className="h-8 w-auto"
-                />
-                <span className="text-lg font-semibold tracking-wide">EDMS</span>
+                <img src="/fti-logo.png" alt="EDMS" className="h-7 w-auto sm:h-8" />
+                <span className="text-base font-semibold tracking-wide sm:text-lg">EDMS</span>
               </Link>
             </div>
-            <div className="header-logo-notch h-full w-16 bg-white" />
+            <div className="header-logo-notch h-full w-12 bg-white sm:w-16" />
           </div>
 
-          {/* เมนูพื้นน้ำเงิน */}
-          <nav className="ml-auto flex items-center gap-2 px-8 text-xs font-medium">
-            <span className="rounded-full bg-white px-4 py-1.5 text-indigo-800 shadow-sm">
+          {/* เมนูพื้นน้ำเงิน: desktop เหมือนเดิม, มือถือลด padding/font-size นิดหน่อยให้พอดีจอ */}
+          <nav className="ml-auto flex items-center gap-1 px-2 text-[10px] font-medium sm:gap-2 sm:px-8 sm:text-xs">
+            <span className="rounded-full bg-white px-3 py-1.5 text-indigo-800 shadow-sm sm:px-4">
               Home
             </span>
             <Link
               href="/document"
-              className="rounded-full border border-white/60 bg-white/10 px-4 py-1.5 text-white transition hover:bg-white hover:text-indigo-800"
+              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
             >
               Document
             </Link>
             <Link
               href="/search"
-              className="rounded-full border border-white/60 bg-white/10 px-4 py-1.5 text-white transition hover:bg-white hover:text-indigo-800"
+              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
             >
               Search
             </Link>

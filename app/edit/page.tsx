@@ -143,37 +143,39 @@ export default function EditDocumentPage() {
     <div className="flex min-h-screen flex-col bg-white text-slate-900">
       {/* Header */}
       <header className="bg-indigo-800 text-white shadow">
-        <div className="flex h-14 w-full items-stretch">
+        <div className="flex h-14 w-full items-stretch pl-0 pr-2 sm:pl-0 sm:pr-4">
+          {/* โลโก้พื้นขาว + มุมเฉียง แบบเดียวกับหน้า Home (desktop) แต่ย่อ padding บนมือถือเล็กน้อย */}
           <div className="flex items-stretch">
-            <div className="flex items-center bg-white px-6">
+            <div className="flex items-center bg-white px-3 sm:px-6">
               <Link href="/" className="flex items-center gap-2 text-indigo-800">
-                <img src="/fti-logo.png" alt="EDMS" className="h-8 w-auto" />
-                <span className="text-lg font-semibold tracking-wide">EDMS</span>
+                <img src="/fti-logo.png" alt="EDMS" className="h-7 w-auto sm:h-8" />
+                <span className="text-base font-semibold tracking-wide sm:text-lg">EDMS</span>
               </Link>
             </div>
-            <div className="header-logo-notch h-full w-16 bg-white" />
+            <div className="header-logo-notch h-full w-12 bg-white sm:w-16" />
           </div>
 
-          <nav className="ml-auto flex items-center gap-2 px-8 text-xs font-medium">
+          {/* เมนูพื้นน้ำเงิน: desktop เหมือนเดิม, มือถือลด padding/font-size นิดหน่อยให้พอดีจอ */}
+          <nav className="ml-auto flex items-center gap-1 px-2 text-[10px] font-medium sm:gap-2 sm:px-8 sm:text-xs">
             <Link
               href="/"
-              className="rounded-full border border-white/60 bg-white/10 px-4 py-1.5 text-white transition hover:bg-white hover:text-indigo-800"
+              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
             >
               Home
             </Link>
             <Link
               href="/document"
-              className="rounded-full border border-white/60 bg-white/10 px-4 py-1.5 text-white transition hover:bg-white hover:text-indigo-800"
+              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
             >
               Document
             </Link>
             <Link
               href="/search"
-              className="rounded-full border border-white/60 bg-white/10 px-4 py-1.5 text-white transition hover:bg-white hover:text-indigo-800"
+              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
             >
               Search
             </Link>
-            <span className="rounded-full bg-white px-4 py-1.5 text-indigo-800 shadow-sm">
+            <span className="rounded-full bg-white px-3 py-1.5 text-indigo-800 shadow-sm sm:px-4">
               Edit
             </span>
           </nav>
@@ -415,43 +417,77 @@ export default function EditDocumentPage() {
                 <label className="text-[11px] font-medium text-slate-800">
                   ฝ่าย/สถาบัน *
                 </label>
-                <input
+                <select
                   name="department"
-                  list="department-list"
+                  className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300 font-sans"
                   defaultValue={initialDepartment || ""}
-                  placeholder="พิมพ์เพื่อค้นหา / เลือกฝ่ายหรือสถาบัน"
-                  className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
                   required
-                />
-                <datalist id="department-list">
-                  <option value="ฝ่ายงานกรรมการและบริหารสำนักงาน (งส.)" />
-                  <option value="ฝ่ายสื่อสารองค์กร (สอ.)" />
-                  <option value="ฝ่ายบัญชีและการเงิน (บง.)" />
-                  <option value="ฝ่ายทรัพยากรมนุษย์ (ทม.)" />
-                  <option value="ฝ่ายดิจิทัลเทคโนโลยี (ดท.)" />
-                  <option value="งานสำนักงานประธานและเลขาธิการ (สปธ.)" />
-                  <option value="สถาบันรหัสสากล (สร.)" />
-                  <option value="ฝ่ายตรวจสอบ (ตส.)" />
-                  <option value="ฝ่ายส่งเสริมและสนับสนุนอุตสาหกรรม (สส.)" />
-                  <option value="ฝ่ายส่งเสริมและสนับสนุนสภาอุตสาหกรรมจังหวัด (สจ.)" />
-                  <option value="ฝ่ายทะเบียนสมาชิก (ทบ.)" />
-                  <option value="ฝ่ายสมาชิกสัมพันธ์ กิจกรรมและรายได้ (สช.)" />
-                  <option value="สถาบันวิสาหกิจขนาดกลางและขนาดย่อมอุตสาหกรรมการผลิต (สวอ.)" />
-                  <option value="ฝ่ายเศรษฐกิจและวิชาการ (ศว.)" />
-                  <option value="ฝ่ายต่างประเทศ (ตป.)" />
-                  <option value="ฝ่ายการค้าและการลงทุน" />
-                  <option value="สถาบันการเปลี่ยนแปลงสภาพภูมิอากาศ (สปอ.)" />
-                  <option value="สถาบันน้ำและสิ่งแวดล้อมเพื่อความยั่งยืน (สนส.)" />
-                  <option value="สถาบันพลังงานเพื่ออุตสาหกรรม (สพ.)" />
-                  <option value="สถาบันอุตสาหกรรมเกษตร (สอก.)" />
-                  <option value="สถาบันการจัดการบรรจุภัณฑ์และรีไซเคิลเพื่อสิ่งแวดล้อม (สบ.)" />
-                  <option value="สถาบันนวัตกรรมเพื่ออุตสาหกรรม (สนอ.)" />
-                  <option value="สถาบันดิจิทัลเพื่ออุตสาหกรรม (สดพ.)" />
-                  <option value="สถาบันพัฒนาอุตสาหกรรมสร้างสรรค์และซอฟต์พาวเวอร์ (สพส.)" />
-                  <option value="สถาบันเสริมสร้างขีดความสามารถมนุษย์" />
-                  <option value="ฝ่ายกฎหมาย (กม.)" />
-                  <option value="ฝ่ายธรรมาภิบาลและงานระบบคุณภาพ (ธร.)" />
-                </datalist>
+                >
+                  <option value="" disabled>
+                    เลือกฝ่ายหรือสถาบัน
+                  </option>
+                  <option value="ฝ่ายงานกรรมการและบริหารสำนักงาน (งส.)">
+                    ฝ่ายงานกรรมการและบริหารสำนักงาน (งส.)
+                  </option>
+                  <option value="ฝ่ายสื่อสารองค์กร (สอ.)">ฝ่ายสื่อสารองค์กร (สอ.)</option>
+                  <option value="ฝ่ายบัญชีและการเงิน (บง.)">ฝ่ายบัญชีและการเงิน (บง.)</option>
+                  <option value="ฝ่ายทรัพยากรมนุษย์ (ทม.)">ฝ่ายทรัพยากรมนุษย์ (ทม.)</option>
+                  <option value="ฝ่ายดิจิทัลเทคโนโลยี (ดท.)">ฝ่ายดิจิทัลเทคโนโลยี (ดท.)</option>
+                  <option value="งานสำนักงานประธานและเลขาธิการ (สปธ.)">
+                    งานสำนักงานประธานและเลขาธิการ (สปธ.)
+                  </option>
+                  <option value="สถาบันรหัสสากล (สร.)">สถาบันรหัสสากล (สร.)</option>
+                  <option value="ฝ่ายตรวจสอบ (ตส.)">ฝ่ายตรวจสอบ (ตส.)</option>
+                  <option value="ฝ่ายส่งเสริมและสนับสนุนอุตสาหกรรม (สส.)">
+                    ฝ่ายส่งเสริมและสนับสนุนอุตสาหกรรม (สส.)
+                  </option>
+                  <option value="ฝ่ายส่งเสริมและสนับสนุนสภาอุตสาหกรรมจังหวัด (สจ.)">
+                    ฝ่ายส่งเสริมและสนับสนุนสภาอุตสาหกรรมจังหวัด (สจ.)
+                  </option>
+                  <option value="ฝ่ายทะเบียนสมาชิก (ทบ.)">ฝ่ายทะเบียนสมาชิก (ทบ.)</option>
+                  <option value="ฝ่ายสมาชิกสัมพันธ์ กิจกรรมและรายได้ (สช.)">
+                    ฝ่ายสมาชิกสัมพันธ์ กิจกรรมและรายได้ (สช.)
+                  </option>
+                  <option value="สถาบันวิสาหกิจขนาดกลางและขนาดย่อมอุตสาหกรรมการผลิต (สวอ.)">
+                    สถาบันวิสาหกิจขนาดกลางและขนาดย่อมอุตสาหกรรมการผลิต (สวอ.)
+                  </option>
+                  <option value="ฝ่ายเศรษฐกิจและวิชาการ (ศว.)">
+                    ฝ่ายเศรษฐกิจและวิชาการ (ศว.)
+                  </option>
+                  <option value="ฝ่ายต่างประเทศ (ตป.)">ฝ่ายต่างประเทศ (ตป.)</option>
+                  <option value="ฝ่ายการค้าและการลงทุน">ฝ่ายการค้าและการลงทุน</option>
+                  <option value="สถาบันการเปลี่ยนแปลงสภาพภูมิอากาศ (สปอ.)">
+                    สถาบันการเปลี่ยนแปลงสภาพภูมิอากาศ (สปอ.)
+                  </option>
+                  <option value="สถาบันน้ำและสิ่งแวดล้อมเพื่อความยั่งยืน (สนส.)">
+                    สถาบันน้ำและสิ่งแวดล้อมเพื่อความยั่งยืน (สนส.)
+                  </option>
+                  <option value="สถาบันพลังงานเพื่ออุตสาหกรรม (สพ.)">
+                    สถาบันพลังงานเพื่ออุตสาหกรรม (สพ.)
+                  </option>
+                  <option value="สถาบันอุตสาหกรรมเกษตร (สอก.)">
+                    สถาบันอุตสาหกรรมเกษตร (สอก.)
+                  </option>
+                  <option value="สถาบันการจัดการบรรจุภัณฑ์และรีไซเคิลเพื่อสิ่งแวดล้อม (สบ.)">
+                    สถาบันการจัดการบรรจุภัณฑ์และรีไซเคิลเพื่อสิ่งแวดล้อม (สบ.)
+                  </option>
+                  <option value="สถาบันนวัตกรรมเพื่ออุตสาหกรรม (สนอ.)">
+                    สถาบันนวัตกรรมเพื่ออุตสาหกรรม (สนอ.)
+                  </option>
+                  <option value="สถาบันดิจิทัลเพื่ออุตสาหกรรม (สดพ.)">
+                    สถาบันดิจิทัลเพื่ออุตสาหกรรม (สดพ.)
+                  </option>
+                  <option value="สถาบันพัฒนาอุตสาหกรรมสร้างสรรค์และซอฟต์พาวเวอร์ (สพส.)">
+                    สถาบันพัฒนาอุตสาหกรรมสร้างสรรค์และซอฟต์พาวเวอร์ (สพส.)
+                  </option>
+                  <option value="สถาบันเสริมสร้างขีดความสามารถมนุษย์">
+                    สถาบันเสริมสร้างขีดความสามารถมนุษย์
+                  </option>
+                  <option value="ฝ่ายกฎหมาย (กม.)">ฝ่ายกฎหมาย (กม.)</option>
+                  <option value="ฝ่ายธรรมาภิบาลและงานระบบคุณภาพ (ธร.)">
+                    ฝ่ายธรรมาภิบาลและงานระบบคุณภาพ (ธร.)
+                  </option>
+                </select>
               </div>
             </div>
 
@@ -518,9 +554,9 @@ export default function EditDocumentPage() {
                 <option value="" disabled>
                   เลือกระดับการแชร์
                 </option>
-                <option value="private">ส่วนตัว</option>
-                <option value="team">แชร์กันในทีม</option>
-                <option value="public">สาธารณะ</option>
+                <option value="private">แชร์ส่วนตัว</option>
+                <option value="team">แชร์ภายในหน่วยงาน</option>
+                <option value="public">แชร์ทั้งองค์กร</option>
               </select>
             </div>
 
