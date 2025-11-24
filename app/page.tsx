@@ -17,7 +17,6 @@ export default function Home() {
             <div className="header-logo-notch h-full w-12 bg-white sm:w-16" />
           </div>
 
-          {/* เมนูพื้นน้ำเงิน: desktop เหมือนเดิม, มือถือลด padding/font-size นิดหน่อยให้พอดีจอ */}
           <nav className="ml-auto flex items-center gap-1 px-2 text-[10px] font-medium sm:gap-2 sm:px-8 sm:text-xs">
             <span className="rounded-full bg-white px-3 py-1.5 text-indigo-800 shadow-sm sm:px-4">
               Home

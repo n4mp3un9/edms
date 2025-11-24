@@ -49,6 +49,7 @@ export default function SearchPage() {
   const [downloadMessage, setDownloadMessage] = useState<string | null>(null);
   const [documents, setDocuments] = useState<UiDocument[]>([]);
   const [accessFilter, setAccessFilter] = useState(initialAccess);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const q = qInput.toLowerCase();
 
@@ -236,17 +237,62 @@ export default function SearchPage() {
     return true;
   });
 
+  // Pagination: แสดงเอกสารเป็นหน้า ๆ
+  const pageSize = 9; // จำนวนเอกสารต่อหน้า
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const pagedDocs = filtered.slice(startIndex, endIndex);
+
+  // สร้างรายการเลขหน้าพร้อมจุดไข่ปลา ถ้าหน้าเยอะ
+  const maxPageButtons = 5; // จำนวนเลขหน้าที่อยากให้เห็นพร้อมกัน (ไม่รวมจุด ...)
+  const pageItems: (number | string)[] = [];
+
+  if (totalPages <= maxPageButtons) {
+    for (let i = 1; i <= totalPages; i++) pageItems.push(i);
+  } else {
+    const windowSize = 3; // จำนวนหน้ารอบ ๆ หน้า current ที่จะแสดง
+    const windowHalf = Math.floor(windowSize / 2);
+
+    let windowStart = safeCurrentPage - windowHalf;
+    let windowEnd = safeCurrentPage + windowHalf;
+
+    if (windowStart < 2) {
+      windowStart = 2;
+      windowEnd = windowStart + windowSize - 1;
+    }
+    if (windowEnd > totalPages - 1) {
+      windowEnd = totalPages - 1;
+      windowStart = windowEnd - windowSize + 1;
+      if (windowStart < 2) windowStart = 2;
+    }
+
+    pageItems.push(1);
+    if (windowStart > 2) pageItems.push("...");
+
+    for (let i = windowStart; i <= windowEnd; i++) {
+      pageItems.push(i);
+    }
+
+    if (windowEnd < totalPages - 1) pageItems.push("...");
+    pageItems.push(totalPages);
+  }
+
   // ฟังก์ชันสำหรับเปลี่ยน access filter แบบเรียลไทม์
   function handleAccessFilterChange(nextAccess: string) {
     setAccessFilter(nextAccess);
-    
+    setCurrentPage(1);
+
     const params = new URLSearchParams();
+
     const qValue = qInput.trim();
     if (qValue) params.set("q", qValue);
     if (startInput) params.set("startDate", startInput);
     if (endInput) params.set("endDate", endInput);
     if (nextAccess) params.set("access", nextAccess);
-    
+
     const query = params.toString();
     router.push(query ? `/search?${query}` : "/search", { scroll: false });
   }
@@ -264,6 +310,7 @@ export default function SearchPage() {
     if (accessFilter) params.set("access", accessFilter);
 
     const query = params.toString();
+    setCurrentPage(1);
     router.push(query ? `/search?${query}` : "/search");
   }
 
@@ -272,6 +319,8 @@ export default function SearchPage() {
     setStartInput("");
     setEndInput("");
     setAccessFilter("");
+    setCurrentPage(1);
+
     router.push("/search");
   }
 
@@ -380,8 +429,8 @@ export default function SearchPage() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <circle cx="11" cy="11" r="5" />
-                  <path d="M16 16 4 4" />
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
               </span>
               <input
@@ -505,9 +554,9 @@ export default function SearchPage() {
 
         {/* Cards grid */}
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((doc, idx) => (
+          {pagedDocs.map((doc, idx) => (
             <article
-              key={`${doc.id}-${idx}`}
+              key={`${doc.id}-${safeCurrentPage}-${idx}`}
               className={`flex flex-col justify-between rounded-2xl border bg-white p-4 shadow-sm ${doc.color}`}
             >
               <div className="mb-3 flex items-start gap-3">
@@ -768,6 +817,51 @@ export default function SearchPage() {
             </article>
           ))}
         </section>
+        {/* Pagination controls */}
+        {totalPages > 1 && (
+          <div className="mt-2 flex items-center justify-center gap-2 text-[11px]">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={safeCurrentPage === 1}
+              className="rounded-full border border-slate-300 bg-white px-3 py-1 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50"
+            >
+              ก่อนหน้า
+            </button>
+            {pageItems.map((item, index) =>
+              typeof item === "number" ? (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setCurrentPage(item)}
+                  className={
+                    "min-w-[32px] rounded-full border px-2 py-1 text-center " +
+                    (item === safeCurrentPage
+                      ? "border-indigo-700 bg-indigo-700 text-white"
+                      : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50")
+                  }
+                >
+                  {item}
+                </button>
+              ) : (
+                <span
+                  key={`ellipsis-${index}`}
+                  className="px-1 text-slate-400 select-none"
+                >
+                  ...
+                </span>
+              )
+            )}
+            <button
+              type="button"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safeCurrentPage === totalPages}
+              className="rounded-full border border-slate-300 bg-white px-3 py-1 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50"
+            >
+              ถัดไป
+            </button>
+          </div>
+        )}
       </main>
 
       {/* Download success popup */}
