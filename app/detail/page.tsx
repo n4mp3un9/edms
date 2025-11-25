@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import UserNavbar from "../components/UserNavbar";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -304,45 +305,13 @@ export default function DocumentDetailPage() {
     };
 
     deleteDocument();
+
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-slate-900">
       {/* Header */}
-      <header className="bg-indigo-800 text-white shadow">
-        <div className="flex h-14 w-full items-stretch pl-0 pr-2 sm:pl-0 sm:pr-4">
-          <div className="flex items-stretch">
-            <div className="flex items-center bg-white px-3 sm:px-6">
-              <Link href="/" className="flex items-center gap-2 text-indigo-800">
-                <img src="/fti-logo.png" alt="EDMS" className="h-7 w-auto sm:h-8" />
-                <span className="text-base font-semibold tracking-wide sm:text-lg">EDMS</span>
-              </Link>
-            </div>
-            <div className="header-logo-notch h-full w-12 bg-white sm:w-16" />
-          </div>
-
-          <nav className="ml-auto flex items-center gap-1 px-2 text-[10px] font-medium sm:gap-2 sm:px-8 sm:text-xs">
-            <Link
-              href="/"
-              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
-            >
-              Home
-            </Link>
-            <Link
-              href="/document"
-              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
-            >
-              Document
-            </Link>
-            <Link
-              href="/search"
-              className="rounded-full bg-white px-3 py-1.5 text-indigo-800 shadow-sm sm:px-4"
-            >
-              Search
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <UserNavbar />
 
       {/* Content */}
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 pb-16">

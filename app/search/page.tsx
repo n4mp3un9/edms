@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import UserNavbar from "../components/UserNavbar";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
 
@@ -134,7 +136,7 @@ export default function SearchPage() {
           const rawDate = doc.created_at;
           const displayDate = formatThaiDateTime(rawDate);
 
-          // แปลง edited_at เป็นข้อความภาษาไทย (ถ้ามี)
+          // แปลง edited_at เป็นข้อความภาษาไทย
           const editedDisplay = doc.edited_at
             ? formatThaiDateTime(doc.edited_at)
             : undefined;
@@ -247,7 +249,7 @@ export default function SearchPage() {
   const pagedDocs = filtered.slice(startIndex, endIndex);
 
   // สร้างรายการเลขหน้าพร้อมจุดไข่ปลา ถ้าหน้าเยอะ
-  const maxPageButtons = 5; // จำนวนเลขหน้าที่อยากให้เห็นพร้อมกัน (ไม่รวมจุด ...)
+  const maxPageButtons = 5; 
   const pageItems: (number | string)[] = [];
 
   if (totalPages <= maxPageButtons) {
@@ -347,7 +349,7 @@ export default function SearchPage() {
       const titleParam = encodeURIComponent(docTitle || "document");
       const namesParam = encodeURIComponent(JSON.stringify(_originalNames ?? []));
 
-      // กรณีดาวน์โหลด ZIP เดียว: ใช้ title เป็นชื่อ ZIP และส่ง originalNames ไปให้ตั้งชื่อไฟล์ข้างใน (ถ้ามี)
+      // กรณีดาวน์โหลด ZIP เดียว: ใช้ title เป็นชื่อ ZIP และส่ง originalNames ไปให้ตั้งชื่อไฟล์ข้างใน 
       const downloadUrl = `/api/download-zip?fileUrls=${fileUrlsParam}&title=${titleParam}&originalNames=${namesParam}`;
 
       const link = document.createElement("a");
@@ -375,37 +377,7 @@ export default function SearchPage() {
   return (
     <div className="flex min-h-screen flex-col bg-white text-slate-900">
       {/* Header */}
-      <header className="bg-indigo-800 text-white shadow">
-        <div className="flex h-14 w-full items-stretch pl-0 pr-2 sm:pl-0 sm:pr-4">
-          <div className="flex items-stretch">
-            <div className="flex items-center bg-white px-3 sm:px-6">
-              <Link href="/" className="flex items-center gap-2 text-indigo-800">
-                <img src="/fti-logo.png" alt="EDMS" className="h-7 w-auto sm:h-8" />
-                <span className="text-base font-semibold tracking-wide sm:text-lg">EDMS</span>
-              </Link>
-            </div>
-            <div className="header-logo-notch h-full w-12 bg-white sm:w-16" />
-          </div>
-
-          <nav className="ml-auto flex items-center gap-1 px-2 text-[10px] font-medium sm:gap-2 sm:px-8 sm:text-xs">
-            <Link
-              href="/"
-              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
-            >
-              Home
-            </Link>
-            <Link
-              href="/document"
-              className="rounded-full border border-white/60 bg-white/10 px-3 py-1.5 text-white transition hover:bg-white hover:text-indigo-800 sm:px-4"
-            >
-              Document
-            </Link>
-            <span className="rounded-full bg-white px-3 py-1.5 text-indigo-800 shadow-sm sm:px-4">
-              Search
-            </span>
-          </nav>
-        </div>
-      </header>
+      <UserNavbar />
 
       {/* Content */}
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 pb-16">
