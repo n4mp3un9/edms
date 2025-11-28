@@ -462,29 +462,6 @@ export default function AdminDocumentsPage() {
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => startEdit(doc)}
-                      className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-semibold text-white shadow-sm hover:bg-emerald-600 disabled:opacity-60"
-                      disabled={savingId !== null && savingId !== doc.id}
-                    >
-                      <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          className="h-2.5 w-2.5 text-emerald-600"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M12 20h9" />
-                          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                        </svg>
-                      </span>
-                      <span>แก้ไข</span>
-                    </button>
-                    <button
-                      type="button"
                       onClick={() => window.open(`/admin/detail?id=${doc.id}`, "_blank")}
                       className="inline-flex items-center gap-1 rounded-full bg-indigo-500 px-3 py-1 text-[10px] font-semibold text-white shadow-sm hover:bg-indigo-600 disabled:opacity-60"
                       title="ดูรายละเอียดเอกสารในหน้าแอดมิน"
@@ -505,6 +482,29 @@ export default function AdminDocumentsPage() {
                         </svg>
                       </span>
                       <span>ดูเอกสาร</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => startEdit(doc)}
+                      className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-3 py-1 text-[10px] font-semibold text-white shadow-sm hover:bg-emerald-600 disabled:opacity-60"
+                      disabled={savingId !== null && savingId !== doc.id}
+                    >
+                      <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          className="h-2.5 w-2.5 text-emerald-600"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                        </svg>
+                      </span>
+                      <span>แก้ไข</span>
                     </button>
                     <button
                       type="button"
