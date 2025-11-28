@@ -256,7 +256,7 @@ export default function AdminDocumentsPage() {
     return haystack.includes(q);
   });
 
-  const pageSize = 50;
+  const pageSize = 20;
   const totalPages = Math.max(1, Math.ceil(filteredDocs.length / pageSize));
   const safePage = Math.min(currentPage, totalPages);
   const startIndex = (safePage - 1) * pageSize;
