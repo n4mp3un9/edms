@@ -11,6 +11,7 @@ type DepartmentInfo = {
 	departmentId: number | null
 	departmentName: string | null
 	departmentCode: string | null
+	
 	departmentNameEn: string | null
 }
 
