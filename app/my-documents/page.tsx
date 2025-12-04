@@ -477,7 +477,7 @@ export default function MyDocumentsPage() {
                   }
                 }
 
-                const colorClass = "border-sky-300 bg-sky-50/70";
+                const colorClass = "border-slate-300 bg-slate-50";
 
                 return (
                   <div
@@ -486,7 +486,7 @@ export default function MyDocumentsPage() {
                   >
                     <div className="mb-2 space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-rose-600 text-[11px] font-semibold text-white shadow-sm">
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-700 text-[11px] font-semibold text-white shadow-sm">
                           {doc.title.charAt(0) || "เ"}
                         </span>
                         <div className="min-w-0 flex-1">
@@ -606,9 +606,9 @@ export default function MyDocumentsPage() {
                             originalNames: JSON.stringify(originalNames),
                           },
                         }}
-                        className="group inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-2 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg"
+                        className="group inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-6 py-2 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-lg"
                       >
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-emerald-700 transition-transform duration-200 group-hover:scale-110">
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-indigo-600 transition-transform duration-200 group-hover:scale-110">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -637,9 +637,9 @@ export default function MyDocumentsPage() {
                             email,
                           },
                         }}
-                        className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose-600 px-6 py-2 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-lg"
+                        className="group inline-flex items-center justify-center gap-2 rounded-full bg-rose-500 px-6 py-2 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-600 hover:shadow-lg"
                       >
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-rose-600 transition-transform duration-200 group-hover:scale-110">
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-rose-500 transition-transform duration-200 group-hover:scale-110">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
