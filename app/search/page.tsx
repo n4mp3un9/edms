@@ -590,14 +590,13 @@ export default function SearchPage() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-black"
+                className="group flex items-center gap-2 rounded-full bg-slate-900 px-5 py-1.5 text-[11px] font-semibold text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg"
               >
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
-
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-900 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    className="h-3 w-3 text-slate-900"
+                    className="h-3.5 w-3.5"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -608,7 +607,7 @@ export default function SearchPage() {
                     <path d="M3 4v8h8" />
                   </svg>
                 </span>
-                <span>รีเซ็ต</span>
+                <span className="tracking-wide">รีเซ็ต</span>
               </button>
             </div>
           </div>
@@ -656,10 +655,11 @@ export default function SearchPage() {
           {pagedDocs.map((doc, idx) => (
             <article
               key={`${doc.id}-${safeCurrentPage}-${idx}`}
-              className={`flex flex-col justify-between rounded-2xl border bg-white p-4 shadow-sm ${doc.color}`}
+              className={`group flex flex-col justify-between rounded-2xl border bg-white p-4 shadow-sm transition-all duration-200 hover:-translate-y-1.5 hover:shadow-2xl hover:-rotate-1 ${doc.color}`}
             >
               <div className="mb-3 flex items-start gap-3">
-                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-600 text-white text-xl leading-none shadow-md">
+                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-600 text-white text-xl leading-none shadow-md transition-transform duration-200 group-hover:scale-110">
+
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -677,19 +677,20 @@ export default function SearchPage() {
 
                 <div className="flex flex-col gap-1 flex-1">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-sm font-semibold text-slate-900">
+                    <h3 className="text-sm font-semibold text-slate-900 transition-colors duration-200 group-hover:text-indigo-800">
+
                       {doc.title}
                     </h3>
                     {email && email === doc.owner && (
                       <button
                         type="button"
                         onClick={() => handleRequestDelete(doc)}
-                        className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-600 hover:bg-rose-100"
+                        className="group flex h-8 w-8 items-center justify-center rounded-full bg-rose-50 text-rose-600 shadow-sm transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-100 hover:shadow-md"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
-                          className="h-3.5 w-3.5"
+                          className="h-3.5 w-3.5 transition-transform duration-150 group-hover:scale-110"
                           fill="none"
                           stroke="currentColor"
                           strokeWidth="2"
@@ -864,13 +865,13 @@ export default function SearchPage() {
                         email,
                       },
                     }}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-1.5 text-white hover:bg-emerald-700"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-1.5 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg"
                   >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-emerald-700 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        className="h-3 w-3 text-emerald-700"
+                        className="h-3 w-3"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
@@ -881,18 +882,18 @@ export default function SearchPage() {
                         <circle cx="12" cy="12" r="3" />
                       </svg>
                     </span>
-                    <span>รายละเอียด</span>
+                    <span className="tracking-wide">รายละเอียด</span>
                   </Link>
                   <button
                     type="button"
                     onClick={() => handleDownload(doc.title, doc.allFileUrls, doc.originalNames)}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-700 px-4 py-1.5 text-white hover:bg-indigo-800"
+                    className="group inline-flex items-center justify-center gap-2 rounded-full bg-indigo-700 px-4 py-1.5 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-800 hover:shadow-lg"
                   >
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white text-indigo-700 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        className="h-3 w-3 text-indigo-700"
+                        className="h-3 w-3"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
@@ -904,7 +905,7 @@ export default function SearchPage() {
                         <rect x="4" y="15" width="16" height="4" rx="1" />
                       </svg>
                     </span>
-                    <span>ดาวน์โหลดเอกสาร</span>
+                    <span className="tracking-wide">ดาวน์โหลดเอกสาร</span>
                   </button>
                 </div>
               </div>
@@ -991,18 +992,51 @@ export default function SearchPage() {
               <button
                 type="button"
                 onClick={() => setConfirmDeleteDoc(null)}
-                className="rounded-full border border-slate-300 bg-white px-5 py-2 font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-60"
+                className="group flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-2 font-medium text-slate-700 shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg disabled:opacity-60"
                 disabled={deletingId === confirmDeleteDoc.id}
               >
-                ยกเลิก
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+                </span>
+                <span className="whitespace-nowrap">ยกเลิก</span>
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="rounded-full bg-rose-600 px-6 py-2 font-semibold text-white shadow-sm hover:bg-rose-700 disabled:opacity-60"
+                className="group flex items-center gap-2 rounded-full bg-rose-600 px-7 py-2 font-semibold text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-lg disabled:opacity-60"
                 disabled={deletingId === confirmDeleteDoc.id}
               >
-                {deletingId === confirmDeleteDoc.id ? "กำลังลบ..." : "ยืนยันการลบ"}
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-rose-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                    <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </span>
+                <span className="whitespace-nowrap">
+                  {deletingId === confirmDeleteDoc.id ? "กำลังลบ..." : "ยืนยันการลบ"}
+                </span>
               </button>
             </div>
           </div>

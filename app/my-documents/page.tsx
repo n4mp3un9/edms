@@ -371,7 +371,7 @@ export default function MyDocumentsPage() {
                 name="q"
                 value={qInput}
                 onChange={(e) => setQInput(e.target.value)}
-                placeholder="ค้นหาจากชื่อเอกสาร , หน่วยงาน , เจ้าของ , คำอธิบาย"
+                placeholder="ค้นหาจากชื่อเอกสาร , แท็ก , คำอธิบาย"
                 className="w-full bg-transparent text-xs outline-none placeholder:text-slate-400"
               />
             </div>
@@ -399,13 +399,13 @@ export default function MyDocumentsPage() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-[11px] font-semibold text-white shadow hover:bg-black"
+                className="group flex items-center gap-2 rounded-full bg-slate-900 px-5 py-1.5 text-[11px] font-semibold text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg"
               >
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-900 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    className="h-3 w-3 text-slate-900"
+                    className="h-3.5 w-3.5"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -416,7 +416,7 @@ export default function MyDocumentsPage() {
                     <path d="M3 4v8h8" />
                   </svg>
                 </span>
-                <span>รีเซ็ต</span>
+                <span className="tracking-wide">รีเซ็ต</span>
               </button>
             </div>
           </form>
@@ -504,12 +504,12 @@ export default function MyDocumentsPage() {
                           <button
                             type="button"
                             onClick={() => handleQuickDownload(doc.title, allFileUrls, originalNames)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 shadow-sm hover:bg-emerald-100"
+                            className="group flex h-7 w-7 items-center justify-center rounded-full bg-emerald-50 text-emerald-700 shadow-sm transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-100 hover:shadow-md"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 24 24"
-                              className="h-3.5 w-3.5"
+                              className="h-3.5 w-3.5 transition-transform duration-150 group-hover:scale-110"
                               fill="none"
                               stroke="currentColor"
                               strokeWidth="2"
@@ -524,7 +524,7 @@ export default function MyDocumentsPage() {
                           <button
                             type="button"
                             onClick={() => handleRequestDelete(doc)}
-                            className="flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-600 shadow-sm hover:bg-rose-100"
+                            className="group flex h-7 w-7 items-center justify-center rounded-full bg-rose-50 text-rose-600 shadow-sm transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-100 hover:shadow-md"
                           >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -604,9 +604,9 @@ export default function MyDocumentsPage() {
                             originalNames: JSON.stringify(originalNames),
                           },
                         }}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-2 text-white shadow hover:bg-emerald-700"
+                        className="group inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-6 py-2 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg"
                       >
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-emerald-700">
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-emerald-700 transition-transform duration-200 group-hover:scale-110">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -621,7 +621,7 @@ export default function MyDocumentsPage() {
                             <circle cx="12" cy="12" r="3" />
                           </svg>
                         </span>
-                        <span className="whitespace-nowrap">รายละเอียด</span>
+                        <span className="whitespace-nowrap tracking-wide">รายละเอียด</span>
                       </Link>
                       <Link
                         href={{
@@ -635,9 +635,9 @@ export default function MyDocumentsPage() {
                             email,
                           },
                         }}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-2 text-white shadow hover:bg-black"
+                        className="group inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-2 text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg"
                       >
-                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-slate-800">
+                        <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/90 text-slate-800 transition-transform duration-200 group-hover:scale-110">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
@@ -652,7 +652,7 @@ export default function MyDocumentsPage() {
                             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
                           </svg>
                         </span>
-                        <span className="whitespace-nowrap">แก้ไขเอกสารนี้</span>
+                        <span className="whitespace-nowrap tracking-wide">แก้ไขเอกสารนี้</span>
                       </Link>
                     </div>
                   </div>

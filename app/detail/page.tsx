@@ -380,9 +380,9 @@ export default function DocumentDetailPage() {
             <button
               type="button"
               onClick={handleDownload}
-              className="flex items-center gap-2 rounded-full bg-indigo-700 px-4 py-2 text-[11px] font-medium text-white shadow hover:bg-indigo-800"
+              className="group flex items-center gap-2 rounded-full bg-indigo-700 px-5 py-2 text-[11px] font-semibold text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-800 hover:shadow-lg"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-[11px] text-indigo-700">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-indigo-700 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -398,7 +398,7 @@ export default function DocumentDetailPage() {
                   <rect x="4" y="15" width="16" height="4" rx="1" />
                 </svg>
               </span>
-              <span>ดาวน์โหลดเอกสาร</span>
+              <span className="tracking-wide">ดาวน์โหลดเอกสาร</span>
             </button>
           </div>
 
@@ -663,9 +663,9 @@ export default function DocumentDetailPage() {
                                 href={previewUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="inline-flex items-center gap-2 rounded-full bg-slate-700 px-4 py-1.5 text-[11px] font-medium text-white shadow-sm hover:bg-slate-800"
+                                className="group inline-flex items-center gap-2 rounded-full bg-slate-800 px-4 py-1.5 text-[11px] font-medium text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-slate-900 hover:shadow-lg"
                               >
-                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-700 text-[10px]">
+                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-800 text-[10px] transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
@@ -680,16 +680,16 @@ export default function DocumentDetailPage() {
                                     <path d="m16 16 4 4" />
                                   </svg>
                                 </span>
-                                <span>เปิดดูไฟล์</span>
+                                <span className="tracking-wide">เปิดดูไฟล์</span>
                               </a>
                             )}
                             <a
                               href={downloadUrl}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center gap-2 rounded-full bg-indigo-700 px-4 py-1.5 text-[11px] font-medium text-white shadow-sm hover:bg-indigo-800"
+                              className="group inline-flex items-center gap-2 rounded-full bg-indigo-700 px-4 py-1.5 text-[11px] font-medium text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-800 hover:shadow-lg"
                             >
-                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-indigo-700 text-[10px]">
+                              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-indigo-700 text-[10px] transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 24 24"
@@ -705,7 +705,7 @@ export default function DocumentDetailPage() {
                                   <rect x="4" y="15" width="16" height="4" rx="1" />
                                 </svg>
                               </span>
-                              <span>ดาวน์โหลดเอกสาร</span>
+                              <span className="tracking-wide">ดาวน์โหลดเอกสาร</span>
                             </a>
                           </div>
                         </div>
@@ -739,16 +739,47 @@ export default function DocumentDetailPage() {
               <button
                 type="button"
                 onClick={handleCancelDelete}
-                className="rounded-full border border-slate-300 bg-white px-5 py-2 font-medium text-slate-700 hover:bg-slate-50"
+                className="group flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-2 font-medium text-slate-700 shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg"
               >
-                ยกเลิก
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+                </span>
+                <span className="whitespace-nowrap">ยกเลิก</span>
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="rounded-full bg-rose-600 px-6 py-2 font-semibold text-white shadow-sm hover:bg-rose-700"
+                className="group flex items-center gap-2 rounded-full bg-rose-600 px-7 py-2 font-semibold text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-lg"
               >
-                ยืนยันการลบ
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-rose-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                    <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </span>
+                <span className="whitespace-nowrap">ยืนยันการลบ</span>
               </button>
             </div>
           </div>

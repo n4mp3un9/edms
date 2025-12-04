@@ -643,9 +643,9 @@ export default function DocumentUploadPage() {
                 type="button"
                 disabled={isUploading}
                 onClick={() => setShowConfirmUpload(true)}
-                className="flex items-center gap-2 rounded-full bg-emerald-600 px-6 py-2 text-white shadow hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-70"
+                className="group flex items-center gap-2 rounded-full bg-emerald-600 px-7 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-70"
               >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-emerald-700 text-[11px]">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-emerald-700 text-[11px] transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -661,16 +661,18 @@ export default function DocumentUploadPage() {
                     <rect x="4" y="15" width="16" height="4" rx="1" />
                   </svg>
                 </span>
-                <span>{isUploading ? "กำลังอัปโหลด..." : "อัปโหลดเอกสาร"}</span>
+                <span className="tracking-wide">
+                  {isUploading ? "กำลังอัปโหลด..." : "อัปโหลดเอกสาร"}
+                </span>
               </button>
               <button
                 type="button"
-                className="flex items-center gap-2 rounded-full bg-rose-600 px-6 py-2 text-white shadow hover:bg-rose-700"
+                className="group flex items-center gap-2 rounded-full bg-rose-600 px-7 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-lg"
                 onClick={() => {
                   setShowConfirmCancel(true);
                 }}
               >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-rose-600 text-[11px]">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-rose-600 text-[11px] transition-transform duration-200 group-hover:scale-110 group-hover:rotate-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -685,7 +687,7 @@ export default function DocumentUploadPage() {
                     <path d="M6 6l12 12" />
                   </svg>
                 </span>
-                <span>ยกเลิก</span>
+                <span className="tracking-wide">ยกเลิก</span>
               </button>
             </div>
           </form>
@@ -694,7 +696,7 @@ export default function DocumentUploadPage() {
 
       {showSuccessModal && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-5 text-xs text-slate-800 shadow-lg">
+          <div className="w-full max-w-xl rounded-3xl bg-white px-8 py-7 text-sm text-slate-800 shadow-2xl">
             <h2 className="mb-2 flex items-center gap-2 text-sm font-semibold text-emerald-700">
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                 <svg
@@ -712,16 +714,31 @@ export default function DocumentUploadPage() {
               </span>
               <span>อัปโหลดเอกสารเรียบร้อยแล้ว</span>
             </h2>
-            <p className="mb-4 text-[11px] text-slate-600">
+            <p className="mb-7 text-[13px] text-slate-600">
               คุณต้องการไปที่หน้ารวมเอกสารเพื่อดูรายการทั้งหมดหรือไม่?
             </p>
-            <div className="flex justify-end gap-2 text-[11px]">
+            <div className="flex justify-end gap-3 text-[13px]">
               <button
                 type="button"
                 onClick={() => setShowSuccessModal(false)}
-                className="rounded-full bg-slate-200 px-4 py-1.5 text-slate-700 hover:bg-slate-300"
+                className="group flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-2 font-medium text-slate-700 shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg"
               >
-                ปิดหน้าต่างนี้
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+                </span>
+                <span className="whitespace-nowrap">ปิดหน้าต่างนี้</span>
               </button>
               <button
                 type="button"
@@ -733,13 +750,13 @@ export default function DocumentUploadPage() {
                   const query = params.toString();
                   router.push(query ? `/search?${query}` : "/search");
                 }}
-                className="flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-1.5 text-white shadow hover:bg-emerald-700"
+                className="group flex items-center gap-2 rounded-full bg-emerald-600 px-7 py-2 font-semibold text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg"
               >
-                <span className="flex h-4 w-4 items-center justify-center rounded-full bg-white/20">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-emerald-700 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    className="h-3 w-3"
+                    className="h-4 w-4"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
@@ -750,7 +767,7 @@ export default function DocumentUploadPage() {
                     <path d="m12 5 7 7-7 7" />
                   </svg>
                 </span>
-                <span>ไปที่หน้ารวมเอกสาร</span>
+                <span className="whitespace-nowrap">ไปที่หน้ารวมเอกสาร</span>
               </button>
             </div>
           </div>
@@ -760,9 +777,9 @@ export default function DocumentUploadPage() {
       {/* Confirm upload modal */}
       {showConfirmUpload && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-lg rounded-3xl bg-white px-8 py-6 text-sm text-slate-800 shadow-2xl">
-            <h2 className="mb-3 flex items-center gap-2 text-base font-semibold text-indigo-700">
-              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-50 text-indigo-700">
+          <div className="w-full max-w-lg rounded-3xl bg-white px-8 py-7 text-sm text-slate-800 shadow-2xl">
+            <h2 className="mb-2 flex items-center gap-3 text-base font-semibold text-indigo-700">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-indigo-100 bg-indigo-50 text-indigo-700 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -779,16 +796,31 @@ export default function DocumentUploadPage() {
               </span>
               <span>ยืนยันการอัปโหลดเอกสาร</span>
             </h2>
-            <p className="mb-6 text-[13px] text-slate-600">
+            <p className="mb-7 text-[13px] text-slate-600">
               คุณต้องการอัปโหลดเอกสารที่เลือกไว้ใช่หรือไม่?
             </p>
             <div className="flex justify-end gap-3 text-[13px]">
               <button
                 type="button"
                 onClick={() => setShowConfirmUpload(false)}
-                className="rounded-full border border-slate-300 bg-white px-5 py-2 font-medium text-slate-700 hover:bg-slate-50"
+                className="group flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-2 font-medium text-slate-700 shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg"
               >
-                ยกเลิก
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+                </span>
+                <span>ยกเลิก</span>
               </button>
               <button
                 type="button"
@@ -797,9 +829,25 @@ export default function DocumentUploadPage() {
                   const formEl = document.getElementById("upload-form") as HTMLFormElement | null;
                   formEl?.requestSubmit();
                 }}
-                className="rounded-full bg-indigo-700 px-6 py-2 font-semibold text-white shadow-sm hover:bg-indigo-800"
+                className="group flex items-center gap-2 rounded-full bg-indigo-700 px-7 py-2 font-semibold text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-800 hover:shadow-lg"
               >
-                ยืนยันการอัปโหลด
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-indigo-700 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 3v12" />
+                    <path d="M8 7l4-4 4 4" />
+                    <rect x="4" y="15" width="16" height="4" rx="1" />
+                  </svg>
+                </span>
+                <span>ยืนยันการอัปโหลด</span>
               </button>
             </div>
           </div>
@@ -836,9 +884,24 @@ export default function DocumentUploadPage() {
               <button
                 type="button"
                 onClick={() => setShowConfirmCancel(false)}
-                className="rounded-full border border-slate-300 bg-white px-5 py-2 font-medium text-slate-700 hover:bg-slate-50"
+                className="group flex items-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-2 font-medium text-slate-700 shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg"
               >
-                ยกเลิก
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-slate-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="M6 6l12 12" />
+                  </svg>
+                </span>
+                <span>ยกเลิก</span>
               </button>
               <button
                 type="button"
@@ -853,9 +916,25 @@ export default function DocumentUploadPage() {
                   setCurrentDateTime(localDate);
                   setCurrentDateTimeThai(getThaiDateTimeString());
                 }}
-                className="rounded-full bg-rose-600 px-6 py-2 font-semibold text-white shadow-sm hover:bg-rose-700"
+                className="group flex items-center gap-2 rounded-full bg-rose-600 px-7 py-2 font-semibold text-white shadow-md transition-transform duration-150 hover:-translate-y-0.5 hover:bg-rose-700 hover:shadow-lg"
               >
-                ยืนยันการยกเลิกการอัปโหลด
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-rose-600 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 9v4" />
+                    <path d="M12 17h.01" />
+                    <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </span>
+                <span>ยืนยันการยกเลิกการอัปโหลด</span>
               </button>
             </div>
           </div>

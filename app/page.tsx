@@ -85,13 +85,13 @@ export default function Home() {
 					<div className="flex flex-nowrap items-center justify-center gap-4 text-xs font-medium">
 						<Link
 								href={email ? `/document?email=${encodeURIComponent(email)}` : "/document"}
-								className="flex w-[230px] items-center gap-3 rounded-full bg-emerald-600 px-5 py-2.5 text-white shadow hover:bg-emerald-700"
+								className="group flex w-[230px] items-center gap-3 rounded-full bg-emerald-600 px-5 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg"
 							>
-								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white">
+								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white transition-transform duration-200 group-hover:scale-110 group-hover:rotate-6">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
-										className="h-4 w-4 text-emerald-600"
+										className="h-4 w-4 text-emerald-600 animate-[pulse_2s_ease-in-out_infinite]"
 										fill="none"
 										stroke="currentColor"
 										strokeWidth="2"
@@ -118,13 +118,13 @@ export default function Home() {
 												: ""
 										}`
 									: "/search"}
-								className="flex w-[200px] items-center gap-3 rounded-full bg-indigo-700 px-4 py-2.5 text-white shadow hover:bg-indigo-800"
+								className="group flex w-[200px] items-center gap-3 rounded-full bg-indigo-700 px-4 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-800 hover:shadow-lg"
 							>
-								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white">
+								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
-										className="h-4 w-4 text-indigo-600"
+										className="h-4 w-4 text-indigo-600 animate-[pulse_2.2s_ease-in-out_infinite]"
 										fill="none"
 										stroke="currentColor"
 										strokeWidth="2"
@@ -150,13 +150,13 @@ export default function Home() {
 												: ""
 										}`
 									: "/my-documents"}
-								className="flex w-[200px] items-center gap-3 rounded-full bg-slate-900 px-4 py-2.5 text-white shadow hover:bg-black"
+								className="group flex w-[200px] items-center gap-3 rounded-full bg-slate-900 px-4 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg"
 							>
-								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white">
+								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 24 24"
-										className="h-4 w-4 text-slate-900"
+										className="h-4 w-4 text-slate-900 animate-[pulse_2.4s_ease-in-out_infinite]"
 										fill="none"
 										stroke="currentColor"
 										strokeWidth="2"
