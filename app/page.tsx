@@ -83,10 +83,10 @@ export default function Home() {
 						</p>
 					</div>
 
-					<div className="flex flex-nowrap items-center justify-center gap-4 text-xs font-medium">
+					<div className="flex flex-col items-center gap-3 text-xs font-medium md:flex-row md:flex-nowrap md:items-center md:justify-center md:gap-4">
 						<Link
 								href={email ? `/document?email=${encodeURIComponent(email)}` : "/document"}
-								className="group flex w-[230px] items-center gap-3 rounded-full bg-emerald-600 px-5 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg"
+								className="group mx-auto flex w-full max-w-xs items-center justify-start gap-3 rounded-full bg-emerald-600 px-5 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-lg md:mx-0 md:w-[230px]"
 							>
 								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white transition-transform duration-200 group-hover:scale-110 group-hover:rotate-6">
 									<svg
@@ -104,7 +104,7 @@ export default function Home() {
 										<rect x="4" y="15" width="16" height="4" rx="1" />
 									</svg>
 								</span>
-								<span className="flex flex-col items-center text-center leading-tight">
+								<span className="flex flex-1 flex-col items-center text-center leading-tight">
 									<span className="text-[13px]">อัปโหลดเอกสารใหม่</span>
 									<span className="text-[10px] opacity-60">
 										อัปโหลดและจัดเก็บเอกสารในระบบ
@@ -119,7 +119,7 @@ export default function Home() {
 												: ""
 										}`
 									: "/search"}
-								className="group flex w-[200px] items-center gap-3 rounded-full bg-indigo-700 px-4 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-800 hover:shadow-lg"
+								className="group mx-auto flex w-full max-w-xs items-center justify-start gap-3 rounded-full bg-indigo-700 px-4 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-indigo-800 hover:shadow-lg md:mx-0 md:w-[200px]"
 							>
 								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6">
 									<svg
@@ -136,7 +136,7 @@ export default function Home() {
 										<path d="m16 16 4 4" />
 									</svg>
 								</span>
-								<span className="flex flex-col items-center text-center leading-tight">
+								<span className="flex flex-1 flex-col items-center text-center leading-tight">
 									<span className="text-[13px]">ค้นหา / เอกสารทั้งหมด</span>
 									<span className="text-[10px] opacity-60">
 										ค้นหาเอกสารที่คุณมีสิทธิ์เข้าถึง
@@ -146,12 +146,12 @@ export default function Home() {
 						<Link
 								href={email
 									? `/my-documents?email=${encodeURIComponent(email)}${
-											department?.departmentName
-												? `&department=${encodeURIComponent(department.departmentName)}`
-												: ""
-										}`
+												department?.departmentName
+													? `&department=${encodeURIComponent(department.departmentName)}`
+													: ""
+											}`
 									: "/my-documents"}
-								className="group flex w-[200px] items-center gap-3 rounded-full bg-slate-900 px-4 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg"
+								className="group mx-auto flex w-full max-w-xs items-center justify-start gap-3 rounded-full bg-slate-900 px-4 py-2.5 text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg md:mx-0 md:w-[200px]"
 							>
 								<span className="flex h-6 w-6 items-center justify-center rounded-full bg-white transition-transform duration-200 group-hover:scale-110 group-hover:rotate-3">
 									<svg
@@ -168,7 +168,7 @@ export default function Home() {
 										<path d="M14 2v6h6" />
 									</svg>
 								</span>
-								<span className="flex flex-col items-start leading-tight">
+								<span className="flex flex-1 flex-col items-center text-center leading-tight">
 									<span className="text-[13px]">แก้ไขเอกสารของฉัน</span>
 									<span className="text-[10px] opacity-60">
 										จัดการเอกสารที่คุณเป็นเจ้าของ

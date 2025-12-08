@@ -859,6 +859,7 @@ export default function SearchPage() {
                         category: doc.category,
                         tags: `${doc.category} ${doc.deptTag}`,
                         description: doc.description,
+                        access: doc.access,
                         fileUrl: doc.fileUrl,
                         fileUrls: JSON.stringify(doc.allFileUrls),
                         originalNames: JSON.stringify(doc.originalNames),

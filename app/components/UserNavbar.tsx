@@ -23,9 +23,12 @@ export default function UserNavbar() {
   useEffect(() => {
     if (!email) {
       // ถ้าไม่มีอีเมล (ถือว่าเซสชันไม่สมบูรณ์) ให้กลับไปหน้า Login ของระบบพนักงาน
-      if (typeof window !== "undefined") {
-        window.location.href =
-          "https://employee-management-9yicp.kinsta.app/login";
+      // แต่ในโหมด development ให้ไม่ redirect เพื่อสะดวกตอนพัฒนา
+      if (process.env.NODE_ENV === "production") {
+        if (typeof window !== "undefined") {
+          window.location.href =
+            "https://employee-management-9yicp.kinsta.app/login";
+        }
       }
       setDeptLabel(null);
       return;
@@ -79,7 +82,7 @@ export default function UserNavbar() {
           >
             <div className="flex items-center gap-2">
               <img src="/fti-logo.png" alt="EDMS" className="h-7 w-auto sm:h-8" />
-              <span className="text-base font-semibold tracking-wide sm:text-lg">
+              <span className="pr-1 text-base font-semibold tracking-normal sm:text-lg">
                 EDMS
               </span>
             </div>
