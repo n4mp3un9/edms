@@ -484,15 +484,14 @@ export default function SearchPage() {
       <UserNavbar />
 
       {/* Content */}
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 pb-16">
+      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-3 py-4 pb-16 sm:px-4 sm:py-6">
         {/* Filter panel */}
-        <section className="rounded-2xl border border-indigo-100 bg-white px-6 py-4 text-xs shadow-sm">
+        <section className="rounded-2xl border border-indigo-100 bg-white px-4 py-4 text-xs shadow-sm sm:px-6">
           <form
-            className="mb-3 flex flex-wrap items-end gap-3"
+            className="mb-3 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end"
             onSubmit={handleSubmit}
           >
-            <div className="flex flex-1 min-w-[200px] items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
-
+            <div className="flex w-full min-w-0 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm md:flex-1 md:min-w-[200px]">
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-50 text-slate-600">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -517,42 +516,44 @@ export default function SearchPage() {
                 className="w-full bg-transparent text-xs outline-none placeholder:text-slate-400"
               />
             </div>
-            <div className="flex flex-col gap-1 text-[11px] text-slate-700">
 
-              <span>วันที่เริ่มต้น</span>
-              <input
-                type="date"
-                name="startDate"
-                value={startInput}
-                onChange={(e) => setStartInput(e.target.value)}
-                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700 font-sans"
-              />
-            </div>
-            <div className="flex flex-col gap-1 text-[11px] text-slate-700">
-              <span>วันที่สิ้นสุด</span>
-              <input
-                type="date"
-                name="endDate"
-                value={endInput}
-                onChange={(e) => setEndInput(e.target.value)}
-                className="min-w-[160px] rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700 font-sans"
-              />
+            <div className="flex w-full flex-wrap gap-3 text-[11px] text-slate-700 md:w-auto">
+              <div className="flex flex-1 min-w-[150px] flex-col gap-1">
+                <span>วันที่เริ่มต้น</span>
+                <input
+                  type="date"
+                  name="startDate"
+                  value={startInput}
+                  onChange={(e) => setStartInput(e.target.value)}
+                  className="w-full rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700 font-sans"
+                />
+              </div>
+              <div className="flex flex-1 min-w-[150px] flex-col gap-1">
+                <span>วันที่สิ้นสุด</span>
+                <input
+                  type="date"
+                  name="endDate"
+                  value={endInput}
+                  onChange={(e) => setEndInput(e.target.value)}
+                  className="w-full rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs shadow-sm text-slate-700 font-sans"
+                />
+              </div>
             </div>
           </form>
 
-          <div className="mb-3 flex flex-wrap items-center gap-3">
+          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center">
             <span className="text-[11px] font-medium text-slate-700">
               ระดับการเข้าถึง :
             </span>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="mt-1 flex flex-nowrap gap-2 overflow-x-auto sm:mt-0">
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("")}
-                className={`rounded-full px-5 py-2 text-[11px] font-semibold outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-semibold outline-none transition-all duration-150 ${
                   accessFilter === ""
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
-                    : "border border-slate-300 bg-white text-slate-700 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
+                    : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
                 ทั้งหมด
@@ -560,10 +561,10 @@ export default function SearchPage() {
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("team")}
-                className={`rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
                   accessFilter === "team"
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
-                    : "border border-slate-300 bg-white text-slate-700 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
+                    : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
                 แชร์ภายในหน่วยงาน
@@ -571,10 +572,10 @@ export default function SearchPage() {
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("public")}
-                className={`rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
                   accessFilter === "public"
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
-                    : "border border-slate-300 bg-white text-slate-700 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
+                    : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
                 แชร์ทั้งองค์กร
@@ -582,20 +583,21 @@ export default function SearchPage() {
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("private")}
-                className={`rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
                   accessFilter === "private"
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
-                    : "border border-slate-300 bg-white text-slate-700 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
+                    : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
                 แชร์ส่วนตัว
               </button>
             </div>
-            <div className="ml-auto flex items-center gap-2">
+
+            <div className="mt-2 flex items-center gap-2 sm:ml-auto sm:mt-0">
               <button
                 type="button"
                 onClick={handleReset}
-                className="group flex items-center gap-2 rounded-full bg-slate-900 px-5 py-1.5 text-[11px] font-semibold text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg"
+                className="group flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-1.5 text-[11px] font-semibold text-white shadow transition-transform duration-150 hover:-translate-y-0.5 hover:bg-black hover:shadow-lg sm:w-auto"
               >
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-900 transition-transform duration-200 group-hover:scale-110">
                   <svg
