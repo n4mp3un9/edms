@@ -816,18 +816,85 @@ export default function AdminDashboardPage() {
                 <p className="text-[11px] text-slate-500">ยังไม่มีข้อมูลเอกสาร</p>
               ) : (
                 <ul className="space-y-2">
-                  {latestDocs.map((doc) => {
+                  {latestDocs.map((doc, index) => {
                     const displayDate = formatThaiDateTime(doc.created_at);
+                    
+                    // สีพาสเทลที่แตกต่างกันสำหรับแต่ละการ์ด
+                    const colorSchemes = [
+                      {
+                        bg: "bg-violet-50",
+                        border: "border-violet-100",
+                        hoverBorder: "hover:border-violet-200",
+                        hoverBg: "hover:bg-violet-100/60",
+                        icon: "bg-violet-600",
+                        dateBg: "bg-violet-100",
+                        dateText: "text-violet-700"
+                      },
+                      {
+                        bg: "bg-cyan-50",
+                        border: "border-cyan-100",
+                        hoverBorder: "hover:border-cyan-200",
+                        hoverBg: "hover:bg-cyan-100/60",
+                        icon: "bg-cyan-600",
+                        dateBg: "bg-cyan-100",
+                        dateText: "text-cyan-700"
+                      },
+                      {
+                        bg: "bg-emerald-50",
+                        border: "border-emerald-100",
+                        hoverBorder: "hover:border-emerald-200",
+                        hoverBg: "hover:bg-emerald-100/60",
+                        icon: "bg-emerald-600",
+                        dateBg: "bg-emerald-100",
+                        dateText: "text-emerald-700"
+                      },
+                      {
+                        bg: "bg-amber-50",
+                        border: "border-amber-100",
+                        hoverBorder: "hover:border-amber-200",
+                        hoverBg: "hover:bg-amber-100/60",
+                        icon: "bg-amber-600",
+                        dateBg: "bg-amber-100",
+                        dateText: "text-amber-700"
+                      },
+                      {
+                        bg: "bg-rose-50",
+                        border: "border-rose-100",
+                        hoverBorder: "hover:border-rose-200",
+                        hoverBg: "hover:bg-rose-100/60",
+                        icon: "bg-rose-600",
+                        dateBg: "bg-rose-100",
+                        dateText: "text-rose-700"
+                      },
+                      {
+                        bg: "bg-violet-50",
+                        border: "border-violet-100",
+                        hoverBorder: "hover:border-violet-200",
+                        hoverBg: "hover:bg-violet-100/60",
+                        icon: "bg-violet-600",
+                        dateBg: "bg-violet-100",
+                        dateText: "text-violet-700"
+                      }
+                    ];
+                    
+                    const colors = colorSchemes[index % colorSchemes.length];
+                    const bgColor = colors.bg;
+                    const borderColor = colors.border;
+                    const hoverBorder = colors.hoverBorder;
+                    const hoverBg = colors.hoverBg;
+                    const iconBg = colors.icon;
+                    const dateBg = colors.dateBg;
+                    const dateText = colors.dateText;
 
                     return (
                       <li
                         key={doc.id}
-                        className="space-y-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-[11px] shadow-sm transition hover:border-indigo-200 hover:bg-indigo-50/60"
+                        className={`space-y-2 rounded-2xl border ${borderColor} ${bgColor} px-3 py-2 text-[11px] shadow-sm transition ${hoverBorder} ${hoverBg}`}
                       >
                         <div className="flex min-w-0 items-center justify-between gap-3">
                           <div className="flex min-w-0 flex-1 items-center gap-2">
                             {/* ไอคอนเอกสารแบบการ์ด Search */}
-                            <span className="flex h-7 w-7 flex-none items-center justify-center rounded-full bg-indigo-600 text-white shadow">
+                            <span className={`flex h-7 w-7 flex-none items-center justify-center rounded-full ${iconBg} text-white shadow`}>
 
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -860,7 +927,7 @@ export default function AdminDashboardPage() {
                           </div>
 
                           <div className="flex flex-col items-end gap-1">
-                            <span className="whitespace-nowrap rounded-full bg-indigo-100 px-3 py-1 text-[10px] font-medium text-indigo-700">
+                            <span className={`whitespace-nowrap rounded-full ${dateBg} px-3 py-1 text-[10px] font-medium ${dateText}`}>
                               {displayDate}
                             </span>
                           </div>
