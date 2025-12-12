@@ -729,6 +729,28 @@ function DocumentDetailPageInner() {
         </section>
       </main>
 
+      {/* Footer */}
+      <footer className="mt-auto border-t border-slate-200 bg-white py-4 text-[11px] text-indigo-900">
+        <div className="mx-auto flex w-full max-w-5xl items-center px-4">
+          {/* โลโก้ใหญ่ ซ้ายสุด */}
+          <div className="flex items-center">
+            <img
+              src="/fti-logo.png"
+              alt="FTI"
+              className="h-14 w-auto"
+            />
+          </div>
+
+          <div className="mx-auto flex flex-col items-center text-center text-[11px] leading-snug text-slate-700">
+            <span>
+              2025 จัดทำโดย ฝ่ายดิจิทัลและเทคโนโลยี สภาอุตสาหกรรมแห่งประเทศไทย
+            </span>
+            <span>จัดทำโดย นางสาวกัลยรักษ์ โรจนเลิศประเสริฐ</span>
+            <span>นักศึกษาฝึกงาน มหาวิทยาลัยพะเยา</span>
+          </div>
+        </div>
+      </footer>
+
       {/* Confirm delete modal */}
       {showConfirmDelete && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
