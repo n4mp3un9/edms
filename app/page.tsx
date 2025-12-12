@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import UserNavbar from "./components/UserNavbar"
 
@@ -15,7 +15,7 @@ type DepartmentInfo = {
 	departmentNameEn: string | null
 }
 
-export default function Home() {
+function HomeInner() {
 	const searchParams = useSearchParams()
 	const email = searchParams.get("email") ?? ""
 	const token = searchParams.get("token") ?? ""
@@ -208,5 +208,19 @@ export default function Home() {
 				</div>
 			</footer>
 		</div>
+	)
+}
+
+export default function Home() {
+	return (
+		<Suspense
+			fallback={
+				<div className="flex min-h-screen items-center justify-center bg-white text-xs text-slate-700">
+					กำลังโหลดหน้าแรกของระบบ...
+				</div>
+			}
+		>
+			<HomeInner />
+		</Suspense>
 	)
 }

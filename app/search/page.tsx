@@ -4,7 +4,7 @@ import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useState, type FormEvent } from "react";
 
 type DbDocument = {
   id: number;
@@ -37,7 +37,7 @@ type UiDocument = {
   editedDisplay?: string;
 };
 
-export default function SearchPage() {
+function SearchPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -1098,5 +1098,19 @@ export default function SearchPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white text-xs text-slate-700">
+          กำลังโหลดหน้าค้นหาเอกสาร...
+        </div>
+      }
+    >
+      <SearchPageInner />
+    </Suspense>
   );
 }

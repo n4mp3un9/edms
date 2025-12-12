@@ -3,7 +3,7 @@
 import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 
 const ALLOWED_DEPARTMENTS = [
   "ผู้อำนวยการใหญ่",
@@ -40,9 +40,10 @@ const ALLOWED_DEPARTMENTS = [
   "ฝ่ายธรรมาภิบาลและงานระบบคุณภาพ",
 ];
 
-export default function DocumentUploadPage() {
+function DocumentUploadPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const email = searchParams.get("email") ?? "";
   const token = searchParams.get("token") ?? "";
   const [isUploading, setIsUploading] = useState(false);
@@ -954,12 +955,26 @@ export default function DocumentUploadPage() {
             />
           </div>
           <div className="mx-auto flex flex-col items-center text-center text-[11px] leading-snug text-slate-700">
-            <span>© 2025 จัดทำโดย ฝ่ายดิจิทัลและเทคโนโลยี สภาอุตสาหกรรมแห่งประเทศไทย</span>
+            <span> 2025 จัดทำโดย ฝ่ายดิจิทัลและเทคโนโลยี สภาอุตสาหกรรมแห่งประเทศไทย</span>
             <span>จัดทำโดย นางสาวกัลยรักษ์ โรจนเลิศประเสริฐ</span>
             <span>นักศึกษาฝึกงาน มหาวิทยาลัยพะเยา</span>
           </div>
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function DocumentUploadPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white text-xs text-slate-700">
+          กำลังโหลดหน้าสำหรับอัปโหลดเอกสาร...
+        </div>
+      }
+    >
+      <DocumentUploadPageInner />
+    </Suspense>
   );
 }

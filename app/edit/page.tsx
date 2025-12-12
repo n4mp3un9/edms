@@ -3,7 +3,7 @@
 import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 
 const ALLOWED_DEPARTMENTS = [
   "ผู้อำนวยการใหญ่",
@@ -40,7 +40,7 @@ const ALLOWED_DEPARTMENTS = [
   "ฝ่ายธรรมาภิบาลและงานระบบคุณภาพ",
 ];
 
-export default function EditDocumentPage() {
+function EditDocumentPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
@@ -989,3 +989,18 @@ export default function EditDocumentPage() {
     </div>
   );
 }
+
+export default function EditDocumentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white text-xs text-slate-700">
+          กำลังโหลดหน้าสำหรับแก้ไขเอกสาร...
+        </div>
+      }
+    >
+      <EditDocumentPageInner />
+    </Suspense>
+  );
+}
+

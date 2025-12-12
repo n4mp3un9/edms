@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 type DbDocument = {
   id: number;
@@ -28,7 +28,7 @@ type DetailState = {
   originalNames: string[];
 };
 
-export default function AdminDocumentDetailPage() {
+function AdminDocumentDetailPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -383,7 +383,7 @@ export default function AdminDocumentDetailPage() {
                                   strokeLinejoin="round"
                                 >
                                   <circle cx="11" cy="11" r="5" />
-                                  <path d="m16 16 4 4" />
+                                  <path d="M16 16 4 4" />
                                 </svg>
                               </span>
                               <span>เปิดดูไฟล์</span>
@@ -428,5 +428,19 @@ export default function AdminDocumentDetailPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function AdminDocumentDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-[11px] text-slate-700">
+          กำลังโหลดรายละเอียดเอกสาร...
+        </div>
+      }
+    >
+      <AdminDocumentDetailPageInner />
+    </Suspense>
   );
 }

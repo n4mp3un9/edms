@@ -3,7 +3,7 @@
 import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 type DbDocument = {
   id: number;
@@ -33,7 +33,7 @@ type DetailState = {
   accessLabel: string;
 };
 
-export default function DocumentDetailPage() {
+function DocumentDetailPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -351,7 +351,6 @@ export default function DocumentDetailPage() {
     };
 
     deleteDocument();
-
   }
 
   return (
@@ -431,7 +430,7 @@ export default function DocumentDetailPage() {
             </h2>
             <div className="grid gap-4 md:grid-cols-4">
               <div className="space-y-1">
-                <div className="flex itemscenter gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px] text-slate-700">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -454,7 +453,7 @@ export default function DocumentDetailPage() {
                 <p className="text-slate-700">{displayDate}</p>
               </div>
               <div className="space-y-1">
-                <div className="flex itemscenter gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px] text-slate-700">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -466,7 +465,7 @@ export default function DocumentDetailPage() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <path d="M4 20h4l10-10-4-4L4 16v4z" />
+                      <path d="M4 20h4l10-10-4-4L4 16v4" />
                       <path d="M14 6l4 4" />
                     </svg>
                   </span>
@@ -477,7 +476,7 @@ export default function DocumentDetailPage() {
                 </p>
               </div>
               <div className="space-y-1">
-                <div className="flex itemscenter gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px] text-slate-700">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -498,7 +497,7 @@ export default function DocumentDetailPage() {
                 <p className="text-slate-700">{owner}</p>
               </div>
               <div className="space-y-1">
-                <div className="flex itemscenter gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px] text-slate-700">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -520,7 +519,7 @@ export default function DocumentDetailPage() {
                 <p className="text-slate-700">{accessLabel}</p>
               </div>
               <div className="space-y-1">
-                <div className="flex itemscenter gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px] text-slate-700">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -545,7 +544,7 @@ export default function DocumentDetailPage() {
                 <p className="text-slate-700">{department}</p>
               </div>
               <div className="space-y-1 md:col-span-2">
-                <div className="flex itemscenter gap-2 font-semibold">
+                <div className="flex items-center gap-2 font-semibold">
                   <span className="text-[13px] text-slate-700">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -800,5 +799,19 @@ export default function DocumentDetailPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function DocumentDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white text-xs text-slate-700">
+          กำลังโหลดรายละเอียดเอกสาร...
+        </div>
+      }
+    >
+      <DocumentDetailPageInner />
+    </Suspense>
   );
 }

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 type DbDocument = {
@@ -97,7 +97,7 @@ function toLocalDateString(raw: string | null | undefined): string | null {
   }
 }
 
-export default function MyDocumentsPage() {
+function MyDocumentsPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const email = (searchParams.get("email") ?? "").trim();
@@ -749,3 +749,18 @@ export default function MyDocumentsPage() {
     </div>
   );
 }
+
+export default function MyDocumentsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white text-xs text-slate-700">
+          กำลังโหลดรายการเอกสารของฉัน...
+        </div>
+      }
+    >
+      <MyDocumentsPageInner />
+    </Suspense>
+  );
+}
+
