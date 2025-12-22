@@ -452,7 +452,7 @@ function SearchPageInner() {
               ระดับการเข้าถึง :
             </span>
 
-            <div className="mt-1 flex flex-nowrap gap-2 overflow-x-auto sm:mt-0">
+            <div className="mt-1 flex flex-nowrap gap-2 overflow-x-auto overflow-y-visible py-1 sm:mt-0">
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("")}

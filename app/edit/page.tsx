@@ -3,43 +3,131 @@
 import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, Suspense, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
 import { toBangkokDateString } from "@/lib/datetime";
 
-const ALLOWED_DEPARTMENTS = [
-  "ผู้อำนวยการใหญ่",
-  "สถาบันรหัสสากล",
-  "ฝ่ายตรวจสอบ",
-  "งานสำนักงานประธานและเลขาธิการ",
-  "ฝ่ายส่งเสริมและสนับสนุนอุตสาหกรรม",
-  "ฝ่ายส่งเสริมและสนับสนุนสภาอุตสาหกรรมจังหวัด",
-  "ฝ่ายทะเบียนสมาชิก",
-  "ฝ่ายสมาชิกสัมพันธ์ กิจกรรมและรายได้",
-  "สถาบันวิสาหกิจขนาดกลางและขนาดย่อมอุตสาหกรรมการผลิต",
-  "ฝ่ายเศรษฐกิจและวิชาการ",
-  "ฝ่ายต่างประเทศ",
-  "ฝ่ายการค้าและการลงทุน",
-  "งานอาเซียนและโลจิสติกส์",
-  "สถาบันการเปลี่ยนแปลงสภาพภูมิอากาศ",
-  "สถาบันพลังงานเพื่ออุตสาหกรรม",
-  "สถาบันน้ำและสิ่งแวดล้อมเพื่อความยั่งยืน",
-  "สถาบันการจัดการบรรจุภัณฑ์และรีไซเคิลเพื่อสิ่งแวดล้อม",
-  "สถาบันอุตสาหกรรมเกษตร",
-  "สถาบันนวัตกรรมเพื่ออุตสาหกรรม",
-  "สถาบันดิจิทัลเพื่ออุตสาหกรรม",
-  "สถาบันพัฒนาอุตสาหกรรมสร้างสรรค์และซอฟต์พาวเวอร์",
-  "สถาบันเสริมสร้างขีดความสามารถมนุษย์",
-  "งานพัฒนานักอุตสาหกรรม",
-  "งานพัฒนาทักษะบุคลากรภาคอุตสาหกรรม",
-  "งานแรงงาน",
-  "ฝ่ายสื่อสารองค์กร",
-  "ฝ่ายกฎหมาย",
-  "ฝ่ายงานกรรมการและบริหารสำนักงาน",
-  "ฝ่ายทรัพยากรมนุษย์",
-  "ฝ่ายดิจิทัลเทคโนโลยี",
-  "ฝ่ายบัญชีและการเงิน",
-  "ฝ่ายธรรมาภิบาลและงานระบบคุณภาพ",
-];
+type DocumentRecord = {
+  id: number;
+  file_url?: string | null;
+  original_filenames?: string | null;
+  access_level?: string | null;
+};
+
+function isDocumentRecord(value: unknown): value is DocumentRecord {
+  if (!value || typeof value !== "object") return false;
+  const v = value as Record<string, unknown>;
+  return typeof v.id === "number";
+}
+
+function ShareToDropdown({
+  value,
+  onChange,
+  required,
+}: {
+  value: "private" | "team" | "public";
+  onChange: (value: "private" | "team" | "public") => void;
+  required?: boolean;
+}) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    function onPointerDown(e: MouseEvent) {
+      const el = wrapperRef.current;
+      if (!el) return;
+      if (!el.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, []);
+
+  const labelMap: Record<"private" | "team" | "public", string> = {
+    private: "แชร์ส่วนตัว",
+    team: "แชร์ภายในหน่วยงาน",
+    public: "แชร์ทั้งองค์กร",
+  };
+
+  const options: { value: "private" | "team" | "public"; label: string }[] = [
+    { value: "private", label: "แชร์ส่วนตัว" },
+    { value: "team", label: "แชร์ภายในหน่วยงาน" },
+    { value: "public", label: "แชร์ทั้งองค์กร" },
+  ];
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <input type="hidden" name="shareTo" value={value} />
+
+      <button
+        type="button"
+        className={`flex w-full items-center justify-between gap-3 rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition ${
+          open
+            ? "border-blue-500 ring-2 ring-blue-200"
+            : "border-slate-200 hover:border-slate-300"
+        }`}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-slate-900">
+          {labelMap[value]}
+        </span>
+        <span className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className={`h-5 w-5 transition-transform ${open ? "rotate-180" : "rotate-0"}`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </span>
+      </button>
+
+      {open && (
+        <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+          <div className="py-2">
+            {options.map((opt) => {
+              const isSelected = opt.value === value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`flex w-full items-center justify-start px-4 py-3 text-left text-[13px] font-medium transition ${
+                    isSelected
+                      ? "bg-blue-50 text-slate-900"
+                      : "text-slate-800 hover:bg-slate-100"
+                  }`}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    onChange(opt.value);
+                    setOpen(false);
+                  }}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {required ? (
+        <input
+          tabIndex={-1}
+          className="sr-only"
+          required
+          value={value}
+          onChange={() => void 0}
+        />
+      ) : null}
+    </div>
+  );
+}
 
 function EditDocumentPageInner() {
   const searchParams = useSearchParams();
@@ -92,13 +180,14 @@ function EditDocumentPageInner() {
         );
         if (!res.ok) return;
         const data = await res.json();
-        const docs = (data.documents || []) as any[];
+        const docsRaw: unknown = (data as { documents?: unknown }).documents;
+        const docs = Array.isArray(docsRaw) ? docsRaw.filter(isDocumentRecord) : [];
         const doc = docs.find((d) => d.id === idNum);
         if (!doc) return;
 
-        const rawUrls = doc.file_url as string | null;
-        const rawNames = doc.original_filenames as string | null;
-        const rawAccess = (doc.access_level || "").toString().toLowerCase().trim();
+        const rawUrls = doc.file_url ?? null;
+        const rawNames = doc.original_filenames ?? null;
+        const rawAccess = (doc.access_level ?? "").toString().toLowerCase().trim();
 
         let urls: string[] = [];
         let names: string[] = [];
@@ -592,7 +681,7 @@ function EditDocumentPageInner() {
                   type="text"
                   defaultValue={initialTitle}
                   placeholder="กรอกชื่อเอกสาร"
-                  className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   required
                 />
               </div>
@@ -600,24 +689,26 @@ function EditDocumentPageInner() {
                 <label className="text-[11px] font-medium text-slate-800">
                   ฝ่าย/สถาบัน *
                 </label>
-                <div className="relative">
+                {initialDepartment ? (
                   <input
                     name="department"
-                    list="departmentList"
-                    placeholder="พิมพ์เพื่อค้นหาหรือเลือกฝ่าย/สถาบัน"
-                    className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-rose-400 focus:ring-1 focus:ring-rose-300 font-sans"
-                    defaultValue={initialDepartment || ""}
+                    type="text"
+                    value={initialDepartment}
+                    readOnly
+                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none"
                     autoComplete="off"
                     required
                   />
-                  <datalist id="departmentList">
-                    {ALLOWED_DEPARTMENTS.map((dept) => (
-                      <option key={dept} value={dept}>
-                        {dept}
-                      </option>
-                    ))}
-                  </datalist>
-                </div>
+                ) : (
+                  <input
+                    name="department"
+                    type="text"
+                    placeholder="กรอกฝ่าย/สถาบัน"
+                    className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    autoComplete="off"
+                    required
+                  />
+                )}
               </div>
             </div>
 
@@ -632,7 +723,7 @@ function EditDocumentPageInner() {
                   type="text"
                   defaultValue={initialTags}
                   placeholder="เช่น : สำคัญ , ด่วน"
-                  className="w-full rounded-full border border-slate-200 bg-white px-4 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   required
                 />
               </div>
@@ -645,7 +736,7 @@ function EditDocumentPageInner() {
                   type="text"
                   value={currentDateTimeThai}
                   readOnly
-                  className="w-full rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none"
                 />
                 <p className="text-[10px] text-slate-400">
                   ระบบจะตั้งเป็นวันเวลาปัจจุบันให้อัตโนมัติเมื่อแก้ไข
@@ -675,24 +766,11 @@ function EditDocumentPageInner() {
                 </span>
                 <span>แชร์เอกสาร (สิทธิ์การเข้าถึง) *</span>
               </label>
-              <select
-                name="shareTo"
-                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
+              <ShareToDropdown
                 value={shareTo}
-                onChange={(e) =>
-                  setShareTo(
-                    (e.target.value as "private" | "team" | "public") || "private"
-                  )
-                }
+                onChange={(next) => setShareTo(next)}
                 required
-              >
-                <option value="" disabled>
-                  เลือกระดับการแชร์
-                </option>
-                <option value="private">แชร์ส่วนตัว</option>
-                <option value="team">แชร์ภายในหน่วยงาน</option>
-                <option value="public">แชร์ทั้งองค์กร</option>
-              </select>
+              />
             </div>
 
             {/* Description */}
@@ -705,7 +783,7 @@ function EditDocumentPageInner() {
                 rows={4}
                 defaultValue={initialDescription}
                 placeholder="กรอกรายละเอียดเพิ่มเติมเกี่ยวกับเอกสาร"
-                className="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-300"
+                className="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 required
               />
             </div>
@@ -832,7 +910,9 @@ function EditDocumentPageInner() {
               <span>ยืนยันการบันทึกการแก้ไข</span>
             </h2>
             <p className="mb-6 text-[13px] text-slate-600">
-              คุณต้องการบันทึกการแก้ไขเอกสาร "{initialTitle || "(ยังไม่มีชื่อเอกสาร)"}" ใช่หรือไม่?
+              คุณต้องการบันทึกการแก้ไขเอกสาร &quot;
+              {initialTitle || "(ยังไม่มีชื่อเอกสาร)"}
+              &quot; ใช่หรือไม่?
             </p>
             <div className="flex justify-end gap-3 text-[13px]">
               <button

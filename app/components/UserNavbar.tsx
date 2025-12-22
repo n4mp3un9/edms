@@ -34,7 +34,6 @@ export default function UserNavbar() {
             "https://employee-management-9yicp.kinsta.app/login";
         }
       }
-      setDeptLabel(null);
       return;
     }
 
@@ -74,7 +73,10 @@ export default function UserNavbar() {
   const isHome = pathname === "/";
   const isDocument = pathname === "/document";
   const isSearch =
-    pathname === "/search" || pathname === "/edit" || pathname === "/detail";
+    pathname === "/search" ||
+    pathname === "/edit" ||
+    pathname === "/detail" ||
+    pathname === "/my-documents";
 
   return (
     <header className="sticky top-0 z-50 bg-indigo-800 text-white shadow">

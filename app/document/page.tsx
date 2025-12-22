@@ -3,42 +3,117 @@
 import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, Suspense, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
 
-const ALLOWED_DEPARTMENTS = [
-  "ผู้อำนวยการใหญ่",
-  "สถาบันรหัสสากล",
-  "ฝ่ายตรวจสอบ",
-  "งานสำนักงานประธานและเลขาธิการ",
-  "ฝ่ายส่งเสริมและสนับสนุนอุตสาหกรรม",
-  "ฝ่ายส่งเสริมและสนับสนุนสภาอุตสาหกรรมจังหวัด",
-  "ฝ่ายทะเบียนสมาชิก",
-  "ฝ่ายสมาชิกสัมพันธ์ กิจกรรมและรายได้",
-  "สถาบันวิสาหกิจขนาดกลางและขนาดย่อมอุตสาหกรรมการผลิต",
-  "ฝ่ายเศรษฐกิจและวิชาการ",
-  "ฝ่ายต่างประเทศ",
-  "ฝ่ายการค้าและการลงทุน",
-  "งานอาเซียนและโลจิสติกส์",
-  "สถาบันการเปลี่ยนแปลงสภาพภูมิอากาศ",
-  "สถาบันพลังงานเพื่ออุตสาหกรรม",
-  "สถาบันน้ำและสิ่งแวดล้อมเพื่อความยั่งยืน",
-  "สถาบันการจัดการบรรจุภัณฑ์และรีไซเคิลเพื่อสิ่งแวดล้อม",
-  "สถาบันอุตสาหกรรมเกษตร",
-  "สถาบันนวัตกรรมเพื่ออุตสาหกรรม",
-  "สถาบันดิจิทัลเพื่ออุตสาหกรรม",
-  "สถาบันพัฒนาอุตสาหกรรมสร้างสรรค์และซอฟต์พาวเวอร์",
-  "สถาบันเสริมสร้างขีดความสามารถมนุษย์",
-  "งานพัฒนานักอุตสาหกรรม",
-  "งานพัฒนาทักษะบุคลากรภาคอุตสาหกรรม",
-  "งานแรงงาน",
-  "ฝ่ายสื่อสารองค์กร",
-  "ฝ่ายกฎหมาย",
-  "ฝ่ายงานกรรมการและบริหารสำนักงาน",
-  "ฝ่ายทรัพยากรมนุษย์",
-  "ฝ่ายดิจิทัลเทคโนโลยี",
-  "ฝ่ายบัญชีและการเงิน",
-  "ฝ่ายธรรมาภิบาลและงานระบบคุณภาพ",
-];
+function ShareToDropdown({
+  value,
+  onChange,
+  required,
+}: {
+  value: "private" | "team" | "public";
+  onChange: (value: "private" | "team" | "public") => void;
+  required?: boolean;
+}) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    function onPointerDown(e: MouseEvent) {
+      const el = wrapperRef.current;
+      if (!el) return;
+      if (!el.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", onPointerDown);
+    return () => document.removeEventListener("mousedown", onPointerDown);
+  }, []);
+
+  const labelMap: Record<"private" | "team" | "public", string> = {
+    private: "แชร์ส่วนตัว",
+    team: "แชร์ภายในหน่วยงาน",
+    public: "แชร์ทั้งองค์กร",
+  };
+
+  const options: { value: "private" | "team" | "public"; label: string }[] = [
+    { value: "private", label: "แชร์ส่วนตัว" },
+    { value: "team", label: "แชร์ภายในหน่วยงาน" },
+    { value: "public", label: "แชร์ทั้งองค์กร" },
+  ];
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <input type="hidden" name="shareTo" value={value} />
+
+      <button
+        type="button"
+        className={`flex w-full items-center justify-between gap-3 rounded-2xl border bg-white px-4 py-3 text-left shadow-sm transition ${
+          open
+            ? "border-blue-500 ring-2 ring-blue-200"
+            : "border-slate-200 hover:border-slate-300"
+        }`}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-slate-900">
+          {labelMap[value]}
+        </span>
+        <span className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            className={`h-5 w-5 transition-transform ${open ? "rotate-180" : "rotate-0"}`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </span>
+      </button>
+
+      {open && (
+        <div className="absolute z-50 mt-2 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+          <div className="py-2">
+            {options.map((opt) => {
+              const isSelected = opt.value === value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  className={`flex w-full items-center justify-start px-4 py-3 text-left text-[13px] font-medium transition ${
+                    isSelected
+                      ? "bg-blue-50 text-slate-900"
+                      : "text-slate-800 hover:bg-slate-100"
+                  }`}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    onChange(opt.value);
+                    setOpen(false);
+                  }}
+                >
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {required ? (
+        <input
+          tabIndex={-1}
+          className="sr-only"
+          required
+          value={value}
+          onChange={() => void 0}
+        />
+      ) : null}
+    </div>
+  );
+}
 
 function DocumentUploadPageInner() {
   const router = useRouter();
@@ -55,6 +130,7 @@ function DocumentUploadPageInner() {
   const [showConfirmUpload, setShowConfirmUpload] = useState(false);
   const [showConfirmCancel, setShowConfirmCancel] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [shareTo, setShareTo] = useState<"private" | "team" | "public">("private");
   const [resolvedDepartment, setResolvedDepartment] = useState<string | null>(null);
   const [loadingDept, setLoadingDept] = useState(false);
   const [deptError, setDeptError] = useState<string | null>(null);
@@ -91,7 +167,6 @@ function DocumentUploadPageInner() {
     return () => clearTimeout(timer);
   }, [message]);
 
-  // ถ้ามีอีเมลจาก HR ให้พยายามดึงฝ่ายจากฐาน employee-portal มาใช้เป็น department อัตโนมัติ
   useEffect(() => {
     if (!email) {
       setResolvedDepartment(null);
@@ -150,17 +225,15 @@ function DocumentUploadPageInner() {
       formData.set("email", email);
     }
 
-    let department = (formData.get("department") as string | null) ?? "";
-    // ถ้ามีฝ่ายจาก HR แล้ว ให้ใช้ค่านั้นและไม่ต้องเช็คกับ ALLOWED_DEPARTMENTS
     if (resolvedDepartment) {
-      department = resolvedDepartment;
       formData.set("department", resolvedDepartment);
-    } else {
-      if (!ALLOWED_DEPARTMENTS.includes(department)) {
-        setIsSuccess(false);
-        setMessage("กรุณาเลือกฝ่าย/สถาบันจากรายการที่กำหนดเท่านั้น");
-        return;
-      }
+    }
+
+    const shareToValue = (formData.get("shareTo") as string | null) ?? "";
+    if (!shareToValue) {
+      setIsSuccess(false);
+      setMessage("กรุณาเลือกระดับการแชร์เอกสาร");
+      return;
     }
 
     if (selectedFiles.length === 0) {
@@ -169,15 +242,12 @@ function DocumentUploadPageInner() {
       return;
     }
 
-    // ให้ใช้วันที่ปัจจุบันอัตโนมัติ
     const createdAt = formData.get("createdAt");
     if (!createdAt) {
-      // กรณีสำรอง: ถ้าไม่มีค่าในฟอร์ม ให้ใช้วันที่ปัจจุบัน (เวลาท้องถิ่น)
       const localDate = getLocalDateString();
       formData.set("createdAt", localDate);
     }
 
-    // เคลียร์ค่าไฟล์จาก FormData เดิม (ถ้ามี) แล้วใส่จาก selectedFiles แทน
     formData.delete("file");
     selectedFiles.forEach((file) => {
       formData.append("files", file);
@@ -196,7 +266,7 @@ function DocumentUploadPageInner() {
       }
 
       setIsSuccess(true);
-      setMessage("🎉 อัปโหลดเอกสารเรียบร้อยแล้ว!");
+      setMessage("อัปโหลดเอกสารเรียบร้อยแล้ว!");
       form.reset();
       setSelectedFiles([]);
       setShowSuccessModal(true);
@@ -210,7 +280,6 @@ function DocumentUploadPageInner() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-slate-900">
-      {/* Header */}
       <UserNavbar />
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-6 pb-16">
@@ -235,7 +304,6 @@ function DocumentUploadPageInner() {
           </h1>
 
           <form id="upload-form" onSubmit={handleSubmit} className="space-y-4 text-xs">
-            {/* File upload */}
             <div className="space-y-2">
               <label className="mb-1 block text-[11px] font-medium text-slate-800">
                 เลือกไฟล์เอกสาร *
@@ -294,9 +362,7 @@ function DocumentUploadPageInner() {
                       return;
                     }
 
-                    // เพิ่มไฟล์ใหม่เข้าไปต่อจากรายการเดิม เพื่อให้เลือกไฟล์ได้หลายรอบในครั้งเดียว
                     setSelectedFiles((prev) => [...prev, ...allowedFiles]);
-                    // เคลียร์ค่า input เพื่อให้เลือกไฟล์ชุดเดิมซ้ำได้
                     e.target.value = "";
                   }}
                 />
@@ -420,7 +486,6 @@ function DocumentUploadPageInner() {
               )}
             </div>
 
-            {/* Document name */}
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-1">
                 <label className="text-[11px] font-medium text-slate-800">
@@ -430,46 +495,42 @@ function DocumentUploadPageInner() {
                   name="title"
                   type="text"
                   placeholder="กรอกชื่อเอกสาร"
-                  className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   required
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-[11px] font-medium text-slate-800">
-                  ฝ่าย/สถาบัน *
-                </label>
-                <div className="relative">
-                  {resolvedDepartment ? (
+                {resolvedDepartment ? (
+                  <>
+                    <label className="text-[11px] font-medium text-slate-800">
+                      ฝ่าย/สถาบัน *
+                    </label>
                     <input
                       key="resolved-department"
                       name="department"
                       value={resolvedDepartment}
                       readOnly
                       placeholder="ฝ่ายจะถูกดึงจากระบบพนักงานอัตโนมัติ"
-                      className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-rose-400 focus:ring-1 focus:ring-rose-300 font-sans"
+                      className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400"
                       autoComplete="off"
                       required
                     />
-                  ) : (
-                    <>
-                      <input
-                        name="department"
-                        list="departmentList"
-                        placeholder="พิมพ์เพื่อค้นหาหรือเลือกฝ่าย/สถาบัน"
-                        className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-rose-400 focus:ring-1 focus:ring-rose-300 font-sans"
-                        autoComplete="off"
-                        required
-                      />
-                      <datalist id="departmentList">
-                        {ALLOWED_DEPARTMENTS.map((dept) => (
-                          <option key={dept} value={dept}>
-                            {dept}
-                          </option>
-                        ))}
-                      </datalist>
-                    </>
-                  )}
-                </div>
+                  </>
+                ) : (
+                  <>
+                    <label className="text-[11px] font-medium text-slate-800">
+                      ฝ่าย/สถาบัน *
+                    </label>
+                    <input
+                      name="department"
+                      type="text"
+                      placeholder="กรอกฝ่าย/สถาบัน"
+                      className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                      autoComplete="off"
+                      required
+                    />
+                  </>
+                )}
                 {email && (
                   <p className="mt-1 text-[10px] text-slate-500">
                     {loadingDept
@@ -483,7 +544,6 @@ function DocumentUploadPageInner() {
               </div>
             </div>
 
-            {/* Tags and date */}
             <div className="grid gap-3 md:grid-cols-2">
               <div className="space-y-1">
                 <label className="text-[11px] font-medium text-slate-800">
@@ -493,7 +553,7 @@ function DocumentUploadPageInner() {
                   name="tags"
                   type="text"
                   placeholder="เช่น : สำคัญ , ด่วน"
-                  className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
+                  className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   required
                 />
               </div>
@@ -506,7 +566,7 @@ function DocumentUploadPageInner() {
                   type="text"
                   value={currentDateTimeThai}
                   readOnly
-                  className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-xs outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none"
                 />
                 <p className="text-[10px] text-slate-400">
                   ระบบจะตั้งเป็นวันเวลาปัจจุบันให้อัตโนมัติเมื่ออัปโหลด
@@ -536,25 +596,11 @@ function DocumentUploadPageInner() {
                 </span>
                 <span>แชร์เอกสาร (กำหนดสิทธิ์การเข้าถึง) *</span>
               </label>
-              <select
-                name="shareTo"
-                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-xs outline-none focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
-                defaultValue=""
+              <ShareToDropdown
+                value={shareTo}
+                onChange={(next) => setShareTo(next)}
                 required
-              >
-                <option value="" disabled>
-                  เลือกระดับการแชร์เอกสาร
-                </option>
-                <option value="private">
-                  แชร์ส่วนตัว – เห็นได้เฉพาะคุณ (ผู้บันทึกเอกสาร)
-                </option>
-                <option value="team">
-                  แชร์ภายในหน่วยงาน – เห็นได้เฉพาะคนในฝ่าย/สถาบันเดียวกัน
-                </option>
-                <option value="public">
-                  แชร์ทั้งองค์กร – ทุกคนในระบบสามารถค้นหาและเปิดดูได้
-                </option>
-              </select>
+              />
             </div>
 
             {/* Description */}
@@ -566,7 +612,7 @@ function DocumentUploadPageInner() {
                 name="description"
                 rows={4}
                 placeholder="กรอกรายละเอียดเพิ่มเติมเกี่ยวกับเอกสาร"
-                className="w-full resize-none rounded-md border border-slate-300 bg-white px-3 py-2 text-xs outline-none placeholder:text-slate-400 focus:border-rose-400 focus:ring-1 focus:ring-rose-300"
+                className="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[13px] font-medium text-slate-900 shadow-sm outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                 required
               />
             </div>
