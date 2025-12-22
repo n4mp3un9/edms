@@ -456,46 +456,104 @@ function SearchPageInner() {
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("")}
-                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-semibold outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-semibold outline-none transition-all duration-150 inline-flex items-center gap-2 ${
                   accessFilter === ""
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
                     : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
-                ทั้งหมด
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                >
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <rect x="14" y="14" width="7" height="7" rx="1" />
+                </svg>
+                <span>ทั้งหมด</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("team")}
-                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 inline-flex items-center gap-2 ${
                   accessFilter === "team"
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
                     : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
-                แชร์ภายในหน่วยงาน
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                >
+                  <circle cx="9" cy="7" r="3" />
+                  <circle cx="17" cy="7" r="3" />
+                  <path d="M2 21v-1a4 4 0 0 1 4-4h6" />
+                  <path d="M22 21v-1a4 4 0 0 0-4-4h-3" />
+                </svg>
+                <span>แชร์ภายในหน่วยงาน</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("public")}
-                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 inline-flex items-center gap-2 ${
                   accessFilter === "public"
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
                     : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
-                แชร์ทั้งองค์กร
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M3 12h18" />
+                  <path d="M12 3a15 15 0 0 1 0 18" />
+                  <path d="M12 3a15 15 0 0 0 0 18" />
+                </svg>
+                <span>แชร์ทั้งองค์กร</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleAccessFilterChange("private")}
-                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 ${
+                className={`whitespace-nowrap rounded-full px-5 py-2 text-[11px] font-medium outline-none transition-all duration-150 inline-flex items-center gap-2 ${
                   accessFilter === "private"
                     ? "border border-indigo-700 bg-indigo-700 text-white shadow-md hover:bg-indigo-800 hover:shadow-lg hover:-translate-y-0.5"
                     : "border border-slate-300 bg-white text-slate-800 shadow-sm hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-md"
                 }`}
               >
-                แชร์ส่วนตัว
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-4 w-4"
+                >
+                  <rect x="5" y="11" width="14" height="10" rx="2" />
+                  <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+                </svg>
+                <span>แชร์ส่วนตัว</span>
               </button>
             </div>
 

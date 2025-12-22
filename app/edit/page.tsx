@@ -3,7 +3,7 @@
 import Link from "next/link";
 import UserNavbar from "../components/UserNavbar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, Suspense, useEffect, useRef, useState } from "react";
+import { FormEvent, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { toBangkokDateString } from "@/lib/datetime";
 
 type DocumentRecord = {
@@ -24,7 +24,7 @@ function ShareToDropdown({
   onChange,
   required,
 }: {
-  value: "private" | "team" | "public";
+  value: "" | "private" | "team" | "public";
   onChange: (value: "private" | "team" | "public") => void;
   required?: boolean;
 }) {
@@ -44,7 +44,8 @@ function ShareToDropdown({
     return () => document.removeEventListener("mousedown", onPointerDown);
   }, []);
 
-  const labelMap: Record<"private" | "team" | "public", string> = {
+  const labelMap: Record<"" | "private" | "team" | "public", string> = {
+    "": "กรุณาเลือกสิทธิการเข้าถึง",
     private: "แชร์ส่วนตัว",
     team: "แชร์ภายในหน่วยงาน",
     public: "แชร์ทั้งองค์กร",
@@ -55,6 +56,59 @@ function ShareToDropdown({
     { value: "team", label: "แชร์ภายในหน่วยงาน" },
     { value: "public", label: "แชร์ทั้งองค์กร" },
   ];
+
+  const iconMap: Record<"" | "private" | "team" | "public", ReactNode> = {
+    "": null,
+    public: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-4 w-4"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <path d="M2 12h20" />
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+      </svg>
+    ),
+    team: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-4 w-4"
+      >
+        <circle cx="9" cy="7" r="3" />
+        <circle cx="17" cy="7" r="3" />
+        <path d="M2 21v-1a4 4 0 0 1 4-4h6" />
+        <path d="M22 21v-1a4 4 0 0 0-4-4h-3" />
+      </svg>
+    ),
+    private: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="h-4 w-4"
+      >
+        <rect x="4" y="10" width="16" height="10" rx="2" />
+        <path d="M8 10V8a4 4 0 0 1 8 0v2" />
+        <circle cx="12" cy="15" r="1" />
+      </svg>
+    ),
+  };
 
   return (
     <div ref={wrapperRef} className="relative">
@@ -69,8 +123,17 @@ function ShareToDropdown({
         }`}
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-slate-900">
-          {labelMap[value]}
+        <span className="min-w-0 flex-1 truncate">
+          <span
+            className={`inline-flex items-center gap-2 text-[13px] font-medium ${
+              value ? "text-slate-900" : "text-slate-400"
+            }`}
+          >
+            {value ? (
+              <span className="shrink-0 text-slate-600">{iconMap[value]}</span>
+            ) : null}
+            <span className="min-w-0 truncate">{labelMap[value]}</span>
+          </span>
         </span>
         <span className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100">
           <svg
@@ -108,7 +171,12 @@ function ShareToDropdown({
                     setOpen(false);
                   }}
                 >
-                  {opt.label}
+                  <span className="inline-flex items-center gap-2">
+                    <span className="shrink-0 text-slate-600">
+                      {iconMap[opt.value]}
+                    </span>
+                    <span>{opt.label}</span>
+                  </span>
                 </button>
               );
             })}
@@ -148,7 +216,7 @@ function EditDocumentPageInner() {
   const [existingFiles, setExistingFiles] = useState<
     { url: string; name: string }[]
   >([]);
-  const [shareTo, setShareTo] = useState<"private" | "team" | "public">("private");
+  const [shareTo, setShareTo] = useState<"" | "private" | "team" | "public">("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [showConfirmSave, setShowConfirmSave] = useState(false);
   const [showConfirmCancel, setShowConfirmCancel] = useState(false);
@@ -221,14 +289,18 @@ function EditDocumentPageInner() {
         );
         setExistingFiles(combined);
 
-        // ตั้งค่า default ของระดับการแชร์ตาม access_level เดิมของเอกสาร
-        let normalized: "private" | "team" | "public" = "private";
-        if (rawAccess.includes("team") || rawAccess.includes("ทีม")) {
-          normalized = "team";
-        } else if (rawAccess.includes("public") || rawAccess.includes("สาธารณะ")) {
-          normalized = "public";
+        // ตั้งค่า default ของระดับการแชร์ตาม access_level เดิมของเอกสาร (ถ้าไม่มี ให้บังคับผู้ใช้เลือก)
+        if (rawAccess) {
+          let normalized: "private" | "team" | "public" = "private";
+          if (rawAccess.includes("team") || rawAccess.includes("ทีม")) {
+            normalized = "team";
+          } else if (rawAccess.includes("public") || rawAccess.includes("สาธารณะ")) {
+            normalized = "public";
+          }
+          setShareTo(normalized);
+        } else {
+          setShareTo("");
         }
-        setShareTo(normalized);
       } catch (err) {
         console.error("Failed to load existing files for edit page", err);
       }
@@ -256,6 +328,12 @@ function EditDocumentPageInner() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+
+    if (!shareTo) {
+      setIsSuccess(false);
+      setMessage("กรุณาเลือกระดับการแชร์เอกสาร");
+      return;
+    }
 
     if (!formData.get("title")) {
       setIsSuccess(false);
